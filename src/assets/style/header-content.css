@@ -1,27 +1,3 @@
-<template>
-  <div class="header-content">
-    <div class="title-header">Danh sachs khách hàng</div>
-    <div class="add-header">
-      <button class="btn-add">
-        <div class="btn-add-icon"></div>
-        <div class="btn-add-text">Thêm khách hàng</div>
-      </button>
-    </div>
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'HeaderContent',
-  data () {
-    return {
-
-    }
-  }
-}
-</script>
-
-<style>
 .header-content {
   padding: 8px 0 16px 0;
   display: flex;
@@ -57,9 +33,7 @@ export default {
   width: 16px;
   height: 16px;
   background-image: url("../../assets/icon/add.png");
-
 }
 .btn-add-text {
   margin-left: 8px;
 }
-</style>

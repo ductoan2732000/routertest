@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <NavSideBar v-bind:DataMenu="DataMenu"></NavSideBar>
+    <NavSideBar></NavSideBar>
     <Header />
     <Content></Content>
   </div>
@@ -19,13 +19,13 @@ export default {
     Content
   },
   data() {
-    return {
-    };
+    return {};
   }
 };
 </script>
 
 <style>
+@import url("./assets/style/main.css");
 #app {
   font-family: GoogleSans-Regular;
   font-size: 13px;

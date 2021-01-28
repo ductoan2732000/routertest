@@ -1,25 +1,3 @@
-<template>
-  <div class="filter-content">
-    <div class="filter-left">
-      <input
-        type="text"
-        class="icon-search input-search"
-        placeholder="Tìm kiếm theo Mã, Tên Khác"
-      />
-    </div>
-    <div class="filtet-right">
-      <button class="btn-fresh"></button>
-    </div>
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'FilterContent'
-}
-</script>
-
-<style>
 .filter-content {
   width: 100%;
   display: flex;
@@ -71,4 +49,3 @@ export default {
 .btn-fresh:hover {
   background-color: #bbbbbb;
 }
-</style>

@@ -1,30 +1,13 @@
 <template>
   <div class="content">
-    <!-- <HeaderContent></HeaderContent>
-    <FilterContent></FilterContent>
-    <DataContent></DataContent>
-    <PaggingContent></PaggingContent> -->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-// import HeaderContent from './content/HeaderContent.vue'
-// import FilterContent from './content/FilterContent.vue'
-// import DataContent from './content/DataContent.vue'
-// import PaggingContent from './content/PaggingContent.vue'
 export default {
-  name: 'Content'
-  // data () {
-  //   return {}
-  // },
-  // components: {
-  //   HeaderContent,
-  //   FilterContent,
-  //   PaggingContent,
-  //   DataContent
-  // }
-}
+  name: "Content"
+};
 </script>
 
 <style>

@@ -1,32 +1,3 @@
-<template>
-  <div class="pagging-bar">
-    <div class="pagging-info"><b>Hiển thị khách hàng 20/100</b></div>
-    <div class="pagging-option">
-      <div class="first-page"></div>
-      <div class="pre-page"></div>
-      <div class="list-page">
-        <button class="btn-page select-page">1</button>
-        <button class="btn-page">2</button>
-        <button class="btn-page">3</button>
-        <button class="btn-page">4</button>
-      </div>
-      <div class="next-page"></div>
-      <div class="last-page"></div>
-    </div>
-    <div class="pagging-recode"><b>10 khách hàng/ trang</b></div>
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'PaggingContent',
-  data () {
-    return {}
-  }
-}
-</script>
-
-<style>
 .pagging-bar {
   height: 56px;
   border-top: 2px solid #bbbbbb;
@@ -140,4 +111,3 @@ export default {
   background-color: #019160;
   color: #ffffff;
 }
-</style>
