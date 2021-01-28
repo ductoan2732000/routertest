@@ -7,6 +7,7 @@
           <div class="btn-add-icon"></div>
           <div class="btn-add-text" @click="btnAdd">Thêm khách hàng</div>
         </button>
+        <Dialog v-bind:isHide="isHideParent"></Dialog>
       </div>
     </div>
     <div class="filter-content">
@@ -38,10 +39,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr v-for="(item, index) in employees" :key="index">
             <td>1234</td>
             <td>Trần Văn Quang</td>
-            <td>Nam</td>
+            <td>{{item.Gender}}</td>
             <td>23/3/3333</td>
             <td>Vip</td>
             <td>09876543211</td>
@@ -73,16 +74,28 @@
 </template>
 
 <script>
+import * as axios from "axios";
+import Dialog from './DialogEmployee.vue'
 export default {
   name: "Employee",
   data() {
-    return {};
+    return {
+      employees: []
+    };
   },
   methods: {
     btnAdd() {
       console.log(1);
     }
   },
+  components: {
+      Dialog
+  },
+  async created() {
+    const response = await axios.get("http://api.manhnv.net/api/employees");
+    this.employees = response.data;
+    console.log(this.employees); 
+  }
 };
 </script>
 
