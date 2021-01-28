@@ -73,7 +73,6 @@
 </template>
 
 <script>
-// import * as axios from  
 export default {
   name: "Employee",
   data() {
@@ -84,14 +83,6 @@ export default {
       console.log(1);
     }
   },
-//   async created() {
-
-//     const response = await axios.get("http://api.manhnv.net/api/employees");
-
-//     console.log(response.data[0]);
-
-//     // this.employees = response.data;
-//   },
 };
 </script>
 
