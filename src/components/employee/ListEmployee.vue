@@ -7,7 +7,7 @@
           <div class="btn-add-icon"></div>
           <div class="btn-add-text" @click="btnAdd">Thêm khách hàng</div>
         </button>
-        <Dialog v-bind:isHide="isHideParent"></Dialog>
+        <Dialog :isHide="isHideParent" @closePopup="closePopup"></Dialog>
       </div>
     </div>
     <div class="filter-content">
@@ -80,12 +80,16 @@ export default {
   name: "Employee",
   data() {
     return {
-      employees: []
+      employees: [],
+      isHideParent: true
     };
   },
   methods: {
     btnAdd() {
-      console.log(1);
+      this.isHideParent = false;
+    },
+    closePopup (){
+      this.isHideParent = true;
     }
   },
   components: {
@@ -94,7 +98,6 @@ export default {
   async created() {
     const response = await axios.get("http://api.manhnv.net/api/employees");
     this.employees = response.data;
-    console.log(this.employees); 
   }
 };
 </script>
