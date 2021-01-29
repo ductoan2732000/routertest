@@ -82,6 +82,7 @@ export default {
   height: 44px;
   cursor: pointer;
   line-height: 44px;
+  text-decoration: none;
 }
 .menu-bar:hover {
   background-color: #e5e5e5;
@@ -105,5 +106,8 @@ export default {
 .menu-text {
   color: black;
   text-decoration-line: none;
+}
+.router-link-exact-active {
+  background-color: aquamarine;
 }
 </style>

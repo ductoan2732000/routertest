@@ -96,7 +96,7 @@ export default {
       Dialog
   },
   async created() {
-    const response = await axios.get("http://api.manhnv.net/api/employees");
+    const response = await axios.get("https://localhost:44373/api/Employeess");
     this.employees = response.data;
   }
 };
