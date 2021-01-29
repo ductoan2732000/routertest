@@ -1,12 +1,13 @@
 <template>
   <div class="header">
     <div class="name-store">
-      <select name="" id="" class="select-store">
+      <DropDown />
+      <!-- <select name="" id="" class="select-store">
         <option value="">Nhà hàng biển đông</option>
         <option value="">Nhà hàng biển đông</option>
         <option value="">Nhà hàng biển đông</option>
         <option value="">Nhà hàng biển đông</option>
-      </select>
+      </select> -->
     </div>
     <div class="account-info">
       <div class="account-image"></div>
@@ -17,10 +18,14 @@
 </template>
 
 <script>
+import DropDown from "./base/DropDown";
 export default {
   name: 'Header',
   data () {
     return {}
+  },
+  components: {
+    DropDown
   }
 }
 </script>

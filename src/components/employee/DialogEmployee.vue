@@ -1,17 +1,13 @@
 <template>
   <div>
-    <!-- <button id="btnAdd" class="m-btn m-btn-default" v-on:click="btnAddOnClick">
-      <div class="m-btn-icon icon-add"></div>
-      <div class="btn-text">Thêm nhân viên</div>
-    </button> -->
     <div
       class="m-dialog dialog-detail"
       title="Thông tin nhân viên"
       :class="{ isHide: isHide }"
     >
       <div class="dialog-modal"></div>
-      <div class="dialog-content">
-        <div class="dialog-header">
+      <div class="dialog-content" id="content-dialog">
+        <div class="dialog-header" id="move-dialog" @mousedown="dragElement">
           <div class="dialog-header-title">THÔNG TIN NHÂN VIÊN</div>
           <div class="dialog-header-close">
             <button v-on:click="btnCancelOnClick">x</button>
@@ -296,6 +292,45 @@ export default {
     };
   },
   methods: {
+    dragElement(e) {  
+      var pos1 = 0,
+        pos2 = 0,
+        pos3 = 0,
+        pos4 = 0;
+
+      let dialog = e.target.parentNode;
+      dragMouseDown(e);
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        dialog.style.top = dialog.offsetTop - pos2 + "px";
+        dialog.style.left = dialog.offsetLeft - pos1 + "px";
+      }
+
+      function closeDragElement() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    },
     btnAddOnClick() {
       this.isHide = false;
     },
@@ -389,6 +424,19 @@ export default {
   left: calc(50% - 325px);
   top: calc(50% - 300px);
   overflow: auto;
+}
+.dialog-content::-webkit-scrollbar {
+  width: 5px;
+}
+.dialog-content::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+.dialog-content::-webkit-scrollbar-thumb {
+  background-color: #bbbbbb;
+  border-radius: 10px;
+}
+.dialog-content::-webkit-scrollbar-thumb:hover {
+  background-color: #019160;
 }
 .dialog-body {
   padding: 0 16px 16px 16px;
@@ -623,7 +671,7 @@ input[type="radio"] {
   width: 20px;
 }
 input {
-    border: 1px solid #bbbbbb;
+  border: 1px solid #bbbbbb;
 }
 input:focus,
 select:focus {
@@ -779,8 +827,7 @@ input.border-red {
   margin-left: 8px;
 }
 
-.m-btn .m-btn-text
-.m-second-button {
+.m-btn .m-btn-text .m-second-button {
   border: 1px solid #bbbbbb;
   background-color: #ffffff;
   border-radius: 4px;
@@ -805,5 +852,14 @@ input.border-red {
 .m-btn-cancel:hover,
 .m-btn-cancel:focus {
   background-color: #bbbbbb;
+}
+#content-dialog {
+  /* position: absolute; */
+  z-index: 9;
+}
+
+#move-dialog {
+  cursor: move;
+  z-index: 10;
 }
 </style>

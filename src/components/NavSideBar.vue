@@ -108,6 +108,6 @@ export default {
   text-decoration-line: none;
 }
 .router-link-exact-active {
-  background-color: aquamarine;
+  background-color: #76bda5;
 }
 </style>
