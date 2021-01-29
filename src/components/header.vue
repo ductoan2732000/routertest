@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="name-store">
-      <DropDown />
+      <DropDown :Datas="selectRestaurant"/>
       <!-- <select name="" id="" class="select-store">
         <option value="">Nhà hàng biển đông</option>
         <option value="">Nhà hàng biển đông</option>
@@ -22,7 +22,13 @@ import DropDown from "./base/DropDown";
 export default {
   name: 'Header',
   data () {
-    return {}
+    return {
+      selectRestaurant:{
+        selectItems: "Chọn nhà hàng",
+        items: ["Nhà hàng biển đông", "Nhà hàng sa mạc", "Nhà hàng chợ lớn"]
+      }
+
+    }
   },
   components: {
     DropDown

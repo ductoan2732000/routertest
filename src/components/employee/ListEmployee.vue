@@ -18,6 +18,7 @@
         />
       </div>
       <div class="filtet-right">
+        <button class="btn-delete" @click="clickDelete"></button>
         <button class="btn-fresh" @click="clickRefresh"></button>
       </div>
     </div>
@@ -25,6 +26,7 @@
       <table id="data-table" cellspacing="0" cellpadding="0">
         <thead>
           <tr>
+            <th></th>
             <th>Mã nhân viên</th>
             <th>Họ và tên</th>
             <th>Giới tính</th>
@@ -39,6 +41,13 @@
         </thead>
         <tbody>
           <tr v-for="(item, index) in employees" :key="index">
+            <td>
+              <input
+                type="checkbox"
+                class="checkbox-row-table"
+                v-model="checkedRow[item.EmployeeCode]"
+              />
+            </td>
             <td>{{ item.EmployeeCode }}</td>
             <td>{{ item.FullName }}</td>
             <td>{{ formartGender(item.Gender) }}</td>
@@ -55,7 +64,7 @@
     </div>
     <div class="pagging-bar">
       <div class="pagging-info">
-        Hiển thị khách hàng <b>{{'3/ ' + employees.length}}</b>
+        Hiển thị khách hàng <b>{{ "3/ " + employees.length }}</b>
       </div>
       <div class="pagging-option">
         <div class="first-page"></div>
@@ -87,7 +96,8 @@ export default {
   data() {
     return {
       employees: [],
-      isHideParent: true
+      isHideParent: true,
+      checkedRow: {}
     };
   },
   methods: {
@@ -116,6 +126,12 @@ export default {
     },
     clickRefresh() {
       location.reload();
+    },
+    clickDelete() {
+      for (let property in this.checkedRow) {
+        if (checkedRow[property.toString] == true) console.log(property);
+      }
+      // console.log(this.checkedRow);
     }
   },
   components: {

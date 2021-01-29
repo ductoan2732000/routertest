@@ -27,6 +27,22 @@
   border-bottom: 1px solid #ccc;
   min-width: 120px;
 }
+#data-table thead th:first-child {
+  min-width: 50px;
+}
+.checkbox-row-table {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #019160;
+  outline: none;
+  position: relative;
+  border-radius: 4px;
+}
+.checkbox-row-table:checked {
+  background-color: red;
+}
 #data-table tbody tr:nth-child(even) {
   background-color: #e9ebee;
 }
