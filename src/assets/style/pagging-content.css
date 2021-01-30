@@ -1,7 +1,6 @@
 .pagging-bar {
   height: 56px;
   border-top: 2px solid #bbbbbb;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,7 +16,7 @@
   display: inline-flex;
 }
 .pagging-recode {
-  position: absolute;
+  position: absolute !important;
   right: 16px;
   width: 150px;
   height: 40px;

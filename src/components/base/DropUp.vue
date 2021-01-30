@@ -4,7 +4,7 @@
       <span>{{ this.itemIsChoose }}</span>
       <div class="img-select"></div>
     </div>
-    <div class="dropdown-list" :class="{ dropdownhind: selectHide }">
+    <div class="dropup-list" :class="{ dropdownhind: selectHide }">
       <div
         class="dropdown-list-item"
         v-for="(item, index) in Datas.items"
@@ -76,7 +76,7 @@ export default {
   background-size: 20px;
   background-repeat: no-repeat;
 }
-.dropdown-list {
+.dropup-list {
   height: 120px;
   width: 100%;
   border: none;
@@ -86,6 +86,7 @@ export default {
   box-sizing: border-box;
   margin-top: 4px;
   cursor: pointer;
+  bottom: 105%;
 }
 .dropdownhind {
   display: none;

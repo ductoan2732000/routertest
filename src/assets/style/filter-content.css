@@ -7,6 +7,10 @@
 .filter-left {
   width: 200px;
   height: 40px;
+  display: -webkit-inline-box
+}
+.select-department-position {
+  margin-left: 20px;
 }
 .filtet-right {
   position: absolute;
@@ -64,3 +68,6 @@
 .btn-delete:hover {
   background-color: #e24529;
 } 
+.deleteon {
+  background-color: #e24529;
+}

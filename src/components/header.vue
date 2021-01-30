@@ -2,12 +2,6 @@
   <div class="header">
     <div class="name-store">
       <DropDown :Datas="selectRestaurant"/>
-      <!-- <select name="" id="" class="select-store">
-        <option value="">Nhà hàng biển đông</option>
-        <option value="">Nhà hàng biển đông</option>
-        <option value="">Nhà hàng biển đông</option>
-        <option value="">Nhà hàng biển đông</option>
-      </select> -->
     </div>
     <div class="account-info">
       <div class="account-image"></div>
@@ -25,7 +19,7 @@ export default {
     return {
       selectRestaurant:{
         selectItems: "Chọn nhà hàng",
-        items: ["Nhà hàng biển đông", "Nhà hàng sa mạc", "Nhà hàng chợ lớn"]
+        items: ["Tất cả nhà hàng", "Nhà hàng biển đông", "Nhà hàng sa mạc", "Nhà hàng chợ lớn"]
       }
 
     }

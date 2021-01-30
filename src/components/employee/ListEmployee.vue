@@ -16,9 +16,18 @@
           class="icon-search input-search"
           placeholder="Tìm kiếm theo Mã, Tên Khác"
         />
+        <DropDown
+          :Datas="SelectDepartments"
+          class="select-department-position"
+        />
+        <DropDown :Datas="SelectPositions" class="select-department-position" />
       </div>
       <div class="filtet-right">
-        <button class="btn-delete" @click="clickDelete"></button>
+        <button
+          class="btn-delete"
+          :class="{ deleteon: DeleteOnTrue }"
+          @click="clickDelete"
+        ></button>
         <button class="btn-fresh" @click="clickRefresh"></button>
       </div>
     </div>
@@ -45,7 +54,7 @@
               <input
                 type="checkbox"
                 class="checkbox-row-table"
-                v-model="checkedRow[item.EmployeeCode]"
+                v-model="checkedRow[item.EmployeeId]"
               />
             </td>
             <td>{{ item.EmployeeCode }}</td>
@@ -78,11 +87,7 @@
         <div class="next-page"></div>
         <div class="last-page"></div>
       </div>
-      <select class="pagging-recode">
-        <option value="">10 khách hàng/ trang</option>
-        <option value="">20 khách hàng/ trang</option>
-        <option value="">30 khách hàng/ trang</option>
-      </select>
+      <DropUp :Datas="SelectPositions" class="pagging-recode" />
     </div>
     <Dialog :isHide="isHideParent" @closePopup="closePopup"></Dialog>
   </div>
@@ -91,13 +96,29 @@
 <script>
 import * as axios from "axios";
 import Dialog from "./DialogEmployee.vue";
+import DropDown from "../base/DropDown";
+import DropUp from "../base/DropUp";
 export default {
   name: "Employee",
   data() {
     return {
       employees: [],
       isHideParent: true,
-      checkedRow: {}
+      checkedRow: {},
+      DeleteOnTrue: this.clickDelete(),
+      SelectDepartments: {
+        selectItems: "Chọn phòng ban",
+        items: [
+          "Tất cả phòng ban",
+          "Phòng giám đốc",
+          "Phòng nhân sự",
+          "Phòng giao ban"
+        ]
+      },
+      SelectPositions: {
+        selectItems: "Chọn vị trí",
+        items: ["Tất cả vị trí", "Giám đốc", "Trưởng phòng nhân sự"]
+      }
     };
   },
   methods: {
@@ -129,13 +150,15 @@ export default {
     },
     clickDelete() {
       for (let property in this.checkedRow) {
-        if (checkedRow[property.toString] == true) console.log(property);
+        if (this.checkedRow[property] == true) return true;
+        else return false;
       }
-      // console.log(this.checkedRow);
     }
   },
   components: {
-    Dialog
+    Dialog,
+    DropDown,
+    DropUp
   },
   async created() {
     const response = await axios.get("https://localhost:44373/api/Employees");
