@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: "DropDown",
+  name: "DropUp",
   data() {
     return {
       selectHide: true,
@@ -39,6 +39,7 @@ export default {
         if (i == index) this.isChoose[i] = true;
         else this.isChoose[i] = false;
       }
+      this.$emit("ClickAnItemChoose", this.itemIsChoose);
     }
   },
   props: {

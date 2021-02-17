@@ -3,9 +3,9 @@
     <div class="header-content">
       <div class="title-header">Danh mục nhân viên</div>
       <div class="add-header">
-        <button class="btn-add">
+        <button class="btn-add" @click="btnAdd">
           <div class="btn-add-icon"></div>
-          <div class="btn-add-text" @click="btnAdd">Thêm khách hàng</div>
+          <div class="btn-add-text">Thêm khách hàng</div>
         </button>
       </div>
     </div>
@@ -73,21 +73,41 @@
     </div>
     <div class="pagging-bar">
       <div class="pagging-info">
-        Hiển thị khách hàng <b>{{ "3/ " + employees.length }}</b>
+        Hiển thị khách hàng
+        <b>{{
+          this.ofset +
+            1 +
+            "-" +
+            (parseInt(this.limit) + this.ofset) +
+            " / " +
+            this.number
+        }}</b>
       </div>
       <div class="pagging-option">
         <div class="first-page"></div>
         <div class="pre-page"></div>
         <div class="list-page">
-          <button class="btn-page select-page">1</button>
-          <button class="btn-page">2</button>
-          <button class="btn-page">3</button>
-          <button class="btn-page">4</button>
+          <button class="btn-page select-page">{{ page[0] }}</button>
+          <button
+            class="btn-page"
+            @click="selectPage(page[1])"
+            v-html="page[1]"
+          ></button>
+          <button class="btn-page" @click="selectPage(page[2])">
+            {{ page[2] }}
+          </button>
+          <button class="btn-page" @click="selectPage(page[3])">
+            {{ page[3] }}
+          </button>
         </div>
         <div class="next-page"></div>
         <div class="last-page"></div>
       </div>
-      <DropUp :Datas="SelectPositions" class="pagging-recode" />
+      <DropUp
+        :Datas="SelectPositions"
+        class="pagging-recode"
+        @ClickAnItemChoose="updateNumber($event)"
+      />
     </div>
     <Dialog :isHide="isHideParent" @closePopup="closePopup"></Dialog>
   </div>
@@ -103,6 +123,10 @@ export default {
   data() {
     return {
       employees: [],
+      page: [1, 2, 3, 4],
+      number: 0,
+      limit: 10,
+      ofset: 0,
       isHideParent: true,
       checkedRow: {},
       DeleteOnTrue: this.clickDelete(),
@@ -116,8 +140,8 @@ export default {
         ]
       },
       SelectPositions: {
-        selectItems: "Chọn vị trí",
-        items: ["Tất cả vị trí", "Giám đốc", "Trưởng phòng nhân sự"]
+        selectItems: "10 nhân viên",
+        items: ["10 nhân viên", "20 nhân viên", "30 nhân viên"]
       }
     };
   },
@@ -153,6 +177,38 @@ export default {
         if (this.checkedRow[property] == true) return true;
         else return false;
       }
+    },
+    updateNumber(e) {
+      this.limit = e.slice(0, 2);
+      this.updateView();
+    },
+    async updateView() {
+      const response = await axios.get(
+        "https://localhost:44373/api/v1/Employees/Pagging?limit=" +
+          this.limit +
+          "&ofset=" +
+          this.ofset
+      );
+      this.employees = response.data.Data;
+    },
+    selectPage(pageIsChoose) {
+      let maxPage = 0;
+      if (this.number % this.limit == 0) {
+        maxPage = this.number / this.limit;
+      } else maxPage = Math.floor(this.number / this.limit) + 1;
+
+      if (pageIsChoose <= maxPage) {
+        let j = 0;
+        for (let i = pageIsChoose; i <= maxPage; i++) {
+          this.page[j] = i;
+          j++;
+        }
+        if (j <= 3) {
+          for (let i = j; i <= 3; i++) this.page[i] = 0;
+        }
+      }
+
+      console.log(this.page);
     }
   },
   components: {
@@ -161,7 +217,17 @@ export default {
     DropUp
   },
   async created() {
-    const response = await axios.get("https://localhost:44373/api/Employees");
+    const numberTotal = await axios.get(
+      "https://localhost:44373/api/v1/Employees/number"
+    );
+    const response = await axios.get(
+      "https://localhost:44373/api/v1/Employees/Pagging?limit=" +
+        this.limit +
+        "&ofset=" +
+        this.ofset
+    );
+
+    this.number = numberTotal.data.Data.Total;
     this.employees = response.data.Data;
   }
 };
