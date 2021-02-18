@@ -2,6 +2,9 @@
 @import url("./filter-content.css");
 @import url("./data-content.css");
 @import url("./pagging-content.css");
+@import url("../../style/base/DropUp.css");
+@import url("../../style/base/Function.css");
+@import url("../../style/employee/DialogEmployee.css");
 @font-face {
   font-family: "GoogleSans-Regular";
   src: url("../font/GoogleSans-Regular.otf") format("opentype");

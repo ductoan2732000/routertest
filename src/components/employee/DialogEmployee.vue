@@ -9,6 +9,14 @@
       <div class="dialog-content" id="content-dialog">
         <div class="dialog-header" id="move-dialog" @mousedown="dragElement">
           <div class="dialog-header-title">THÔNG TIN NHÂN VIÊN</div>
+          <div class="option-employee">
+            <input type="checkbox" id="check1" name="" value="" />
+            <label for="check1" class="checkbox-check">Là khách hàng</label>
+          </div>
+          <div class="option-employee">
+            <input type="checkbox" id="check2" name="" value="" />
+            <label for="check2" class="checkbox-check">Là nhà cung cấp</label>
+          </div>
           <div class="dialog-header-close">
             <button v-on:click="btnCancelOnClick">x</button>
           </div>
@@ -292,7 +300,7 @@ export default {
     };
   },
   methods: {
-    dragElement(e) {  
+    dragElement(e) {
       var pos1 = 0,
         pos2 = 0,
         pos3 = 0,

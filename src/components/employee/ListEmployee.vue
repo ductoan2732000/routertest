@@ -1,11 +1,10 @@
 <template>
   <div>
     <div class="header-content">
-      <div class="title-header">Danh mục nhân viên</div>
+      <div class="title-header">Nhân viên</div>
       <div class="add-header">
         <button class="btn-add" @click="btnAdd">
-          <div class="btn-add-icon"></div>
-          <div class="btn-add-text">Thêm khách hàng</div>
+          <div class="btn-add-text">Thêm</div>
         </button>
       </div>
     </div>
@@ -16,26 +15,25 @@
           class="icon-search input-search"
           placeholder="Tìm kiếm theo Mã, Tên Khác"
         />
-        <DropDown
+        <!-- <DropDown
           :Datas="SelectDepartments"
           class="select-department-position"
-        />
-        <DropDown :Datas="SelectPositions" class="select-department-position" />
+        /> -->
       </div>
-      <div class="filtet-right">
+      <!-- <div class="filtet-right">
         <button
           class="btn-delete"
           :class="{ deleteon: DeleteOnTrue }"
           @click="clickDelete"
         ></button>
         <button class="btn-fresh" @click="clickRefresh"></button>
-      </div>
+      </div> -->
     </div>
     <div class="data-content">
       <table id="data-table" cellspacing="0" cellpadding="0">
         <thead>
           <tr>
-            <th></th>
+            <!-- <th></th> -->
             <th>Mã nhân viên</th>
             <th>Họ và tên</th>
             <th>Giới tính</th>
@@ -46,17 +44,18 @@
             <th>Phòng ban</th>
             <th>Mức lương co bản</th>
             <th>Tình trạng công việc</th>
+            <th>Chức năng</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in employees" :key="index">
-            <td>
+            <!-- <td>
               <input
                 type="checkbox"
                 class="checkbox-row-table"
                 v-model="checkedRow[item.EmployeeId]"
               />
-            </td>
+            </td> -->
             <td>{{ item.EmployeeCode }}</td>
             <td>{{ item.FullName }}</td>
             <td>{{ formartGender(item.Gender) }}</td>
@@ -67,13 +66,17 @@
             <td>{{ item.DepartmentName }}</td>
             <td>{{ item.BasicSalary }}</td>
             <td>{{ formartStatus(item.Status) }}</td>
+            <td class="functions">
+              <button class="adjuss">Sửa</button>
+              <Function :Datas="Functions" />
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="pagging-bar">
       <div class="pagging-info">
-        Hiển thị khách hàng
+        Tổng số
         <b>{{
           this.ofset +
             1 +
@@ -84,8 +87,7 @@
         }}</b>
       </div>
       <div class="pagging-option">
-        <div class="first-page"></div>
-        <div class="pre-page"></div>
+        <button class="first-page">Trước</button>
         <div class="list-page">
           <button class="btn-page select-page">{{ page[0] }}</button>
           <button
@@ -100,8 +102,7 @@
             {{ page[3] }}
           </button>
         </div>
-        <div class="next-page"></div>
-        <div class="last-page"></div>
+        <button class="last-page">Sau</button>
       </div>
       <DropUp
         :Datas="SelectPositions"
@@ -118,6 +119,7 @@ import * as axios from "axios";
 import Dialog from "./DialogEmployee.vue";
 import DropDown from "../base/DropDown";
 import DropUp from "../base/DropUp";
+import Function from "../base/Function";
 export default {
   name: "Employee",
   data() {
@@ -130,18 +132,26 @@ export default {
       isHideParent: true,
       checkedRow: {},
       DeleteOnTrue: this.clickDelete(),
-      SelectDepartments: {
-        selectItems: "Chọn phòng ban",
+      // SelectDepartments: {
+      //   selectItems: "Chọn phòng ban",
+      //   items: [
+      //     "Tất cả phòng ban",
+      //     "Phòng giám đốc",
+      //     "Phòng nhân sự",
+      //     "Phòng giao ban"
+      //   ]
+      // },
+      SelectPositions: {
+        selectItems: "10 bản ghi 1 trang",
         items: [
-          "Tất cả phòng ban",
-          "Phòng giám đốc",
-          "Phòng nhân sự",
-          "Phòng giao ban"
+          "10 bản ghi 1 trang",
+          "20 bản ghi 1 trang",
+          "30 bản ghi 1 trang"
         ]
       },
-      SelectPositions: {
-        selectItems: "10 nhân viên",
-        items: ["10 nhân viên", "20 nhân viên", "30 nhân viên"]
+      Functions: {
+        selectItems: "",
+        items: ["Nhân bản", "Xóa", "Ngừng sử dụng"]
       }
     };
   },
@@ -214,7 +224,8 @@ export default {
   components: {
     Dialog,
     DropDown,
-    DropUp
+    DropUp,
+    Function
   },
   async created() {
     const numberTotal = await axios.get(

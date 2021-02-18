@@ -1,9 +1,21 @@
 <template>
   <div class="header">
     <div class="name-store">
-      <DropDown :Datas="selectRestaurant"/>
+      <DropDown :Datas="selectRestaurant" />
     </div>
     <div class="account-info">
+      <div class="filter-left">
+        <input
+          type="text"
+          class="icon-search input-search"
+          placeholder="Nhập từ khóa tìm kiếm"
+        />
+      </div>
+      <div class="account-iconbar"></div>
+      <div class="account-setting"></div>
+      <div class="account-chat"></div>
+      <div class="account-help"></div>
+      <div class="account-alert"></div>
       <div class="account-image"></div>
       <div class="account-name">Trần Đức Toản</div>
       <div class="account-option"></div>
@@ -14,20 +26,24 @@
 <script>
 import DropDown from "./base/DropDown";
 export default {
-  name: 'Header',
-  data () {
+  name: "Header",
+  data() {
     return {
-      selectRestaurant:{
+      selectRestaurant: {
         selectItems: "Chọn nhà hàng",
-        items: ["Tất cả nhà hàng", "Nhà hàng biển đông", "Nhà hàng sa mạc", "Nhà hàng chợ lớn"]
+        items: [
+          "Tất cả nhà hàng",
+          "Nhà hàng biển đông",
+          "Nhà hàng sa mạc",
+          "Nhà hàng chợ lớn"
+        ]
       }
-
-    }
+    };
   },
   components: {
     DropDown
   }
-}
+};
 </script>
 
 <style>
@@ -59,6 +75,46 @@ export default {
   right: 24px;
   display: flex;
   align-items: center;
+}
+.account-iconbar {
+  margin-left: 20px;
+  width: 30px;
+  height: 30px;
+  /* border: 1px solid #ccc; */
+  /* border-radius: 50%; */
+  background-image: url(/static/img/Sprites.64af8f61.64af8f6.svg);
+  background-size: 2000px;
+  background-position: -561px -26px;
+}
+.account-setting {
+  width: 30px;
+  height: 30px;
+  /* border: 1px solid #ccc; */
+  /* border-radius: 50%; */
+  background-image: url(/static/img/Sprites.64af8f61.64af8f6.svg);
+  background-size: 2000px;
+  background-position: -667px -26px;
+}
+.account-chat {
+  width: 30px;
+  height: 30px;
+  background-image: url(/static/img/Sprites.64af8f61.64af8f6.svg);
+  background-size: 2000px;
+  background-position: -890px -26px;
+}
+.account-help {
+  width: 30px;
+  height: 30px;
+  background-image: url(/static/img/Sprites.64af8f61.64af8f6.svg);
+  background-size: 2000px;
+  background-position: -724px -26px;
+}
+.account-alert {
+  width: 30px;
+  height: 30px;
+  background-image: url(/static/img/Sprites.64af8f61.64af8f6.svg);
+  background-size: 2000px;
+  background-position: -780px -26px;
 }
 .account-image {
   width: 30px;

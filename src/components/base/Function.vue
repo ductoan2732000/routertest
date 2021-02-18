@@ -1,10 +1,9 @@
 <template>
-  <div class="select-box">
-    <div class="select-drop" @click="isHideDrop()">
-      <span>{{ this.itemIsChoose }}</span>
-      <div class="img-select"></div>
+  <div class="select-function">
+    <div class="select-functionall" @click="isHideDrop()">
+      <div class="img-selectfunction"></div>
     </div>
-    <div class="dropup-list" :class="{ dropdownhind: selectHide }">
+    <div class="dropup-listfunction" :class="{ dropdownhind: selectHide }">
       <div
         class="dropdown-list-item"
         v-for="(item, index) in Datas.items"
@@ -20,7 +19,7 @@
 
 <script>
 export default {
-  name: "DropUp",
+  name: "Function",
   data() {
     return {
       selectHide: true,

@@ -1,0 +1,14 @@
+.option-employee {
+  min-width: 50px;
+  height: 30px;
+  display: flex;
+  align-items: baseline;
+}
+#check1,
+#check2 {
+  width: 15px;
+  height: 15px;
+}
+.checkbox-check {
+  font-size: 12px;
+}
