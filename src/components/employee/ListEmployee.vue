@@ -35,15 +35,13 @@
           <tr>
             <!-- <th></th> -->
             <th>Mã nhân viên</th>
-            <th>Họ và tên</th>
-            <th>Giới tính</th>
-            <th>Ngày sinh</th>
-            <th>Điện thoại</th>
-            <th>Email</th>
-            <th>Chức vụ</th>
-            <th>Phòng ban</th>
-            <th>Mức lương co bản</th>
-            <th>Tình trạng công việc</th>
+            <th>Tên nhân viên</th>
+            <th>Chức danh</th>
+            <th>Tên đơn vị</th>
+            <th>Số tài khoản</th>
+            <th>Tên ngân hàng</th>
+            <th>Trạng thái</th>
+            <th>Chi nhánh</th>
             <th>Chức năng</th>
           </tr>
         </thead>
@@ -58,14 +56,12 @@
             </td> -->
             <td>{{ item.EmployeeCode }}</td>
             <td>{{ item.FullName }}</td>
-            <td>{{ formartGender(item.Gender) }}</td>
-            <td>{{ formartDateOfBirth(item.DateOfBirth) }}</td>
-            <td>{{ item.PhoneNumber }}</td>
-            <td>{{ item.Email }}</td>
-            <td>{{ item.PositionName }}</td>
+            <td>{{ item.Title }}</td>
             <td>{{ item.DepartmentName }}</td>
-            <td>{{ item.BasicSalary }}</td>
+            <td>{{ item.BankCode }}</td>
+            <td>{{ item.BankName }}</td>
             <td>{{ formartStatus(item.Status) }}</td>
+            <td>{{ item.Branch }}</td>
             <td class="functions">
               <button class="adjuss">Sửa</button>
               <Function :Datas="Functions" />
@@ -240,6 +236,7 @@ export default {
 
     this.number = numberTotal.data.Data.Total;
     this.employees = response.data.Data;
+    console.log(this.employees);
   }
 };
 </script>

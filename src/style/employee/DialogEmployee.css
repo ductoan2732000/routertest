@@ -2,13 +2,25 @@
   min-width: 50px;
   height: 30px;
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 #check1,
 #check2 {
   width: 15px;
   height: 15px;
+  margin-left: 15px;
 }
 .checkbox-check {
   font-size: 12px;
+}
+.area2 {
+  border: 1px solid #ccc;
+  height: 190px;
+}
+.dialog-contact {
+  min-width: 60px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
 }

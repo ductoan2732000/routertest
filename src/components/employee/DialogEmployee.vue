@@ -17,27 +17,26 @@
             <input type="checkbox" id="check2" name="" value="" />
             <label for="check2" class="checkbox-check">Là nhà cung cấp</label>
           </div>
+          <div class="dialog-header-help"></div>
           <div class="dialog-header-close">
             <button v-on:click="btnCancelOnClick">x</button>
           </div>
         </div>
         <div class="dialog-body">
           <div class="m-row m-flex">
-            <div class="m-col el-avatar-employee m-flex-1">
+            <!-- <div class="m-col el-avatar-employee m-flex-1">
               <div class="el-avatar"></div>
               <div class="el-avatar-note text-align-center">
                 (Vui lòng chọn ảnh có định dạng <br /><b
                   >.jpg, .jpeg, .png, .gif. </b
                 >)
               </div>
-            </div>
+            </div> -->
             <div class="m-col el-left m-flex-4">
-              <div class="group-label-info">A. Thông tin chung:</div>
-              <hr class="hr-group-label" />
               <div class="m-row mg-top-0 m-flex">
-                <div class="m-col m-flex-1">
+                <div class="m-col m-flex-0">
                   <div class="m-label">
-                    Mã nhân viên (<span class="label-required">*</span>)
+                    Mã (<span class="label-required">*</span>)
                   </div>
                   <div class="m-control">
                     <input
@@ -52,7 +51,7 @@
                     />
                   </div>
                 </div>
-                <div class="m-flex-1 mg-left-10px">
+                <div class="m-flex-0 mg-left-10px">
                   <div class="m-label">
                     Họ và tên (<span class="label-required">*</span>)
                   </div>
@@ -67,9 +66,7 @@
                     />
                   </div>
                 </div>
-              </div>
-              <div class="m-row m-flex">
-                <div class="m-flex-1">
+                <div class="m-flex-0 mg-left-10px">
                   <div class="m-label">Ngày sinh</div>
                   <input
                     class="m-combobox-input"
@@ -92,11 +89,30 @@
               </div>
               <div class="m-row m-flex">
                 <div class="m-flex-1">
+                  <div class="m-label">Vị trí</div>
+                  <select
+                    id="cbxPosition"
+                    class="m-control"
+                    v-model="Employee.EmployeePositionId"
+                  >
+                    <option
+                      v-for="(item, index) in listEmployeePosition"
+                      :key="index"
+                      :value="item.EmployeePositionId"
+                    >
+                      {{ item.EmployeePositionName }}
+                    </option>
+                    <!-- <option value="19165ed7-212e-21c4-0428-030d4265475f">
+                      Nhân viên
+                    </option> -->
+                  </select>
+                </div>
+                <div class="m-flex-0 mg-left-10px">
                   <div
                     class="m-label"
                     title="Số chứng minh thư nhân dân hoặc căn cước công dân"
                   >
-                    Số CMTND/ Căn cước (<span class="label-required">*</span>)
+                    Đơn vị (<span class="label-required">*</span>)
                   </div>
                   <div class="m-control">
                     <input
@@ -108,7 +124,7 @@
                     />
                   </div>
                 </div>
-                <div class="m-flex-1 mg-left-10px">
+                <div class="m-flex-0 mg-left-10px">
                   <div class="m-label">Ngày cấp</div>
                   <input
                     class="m-combobox-input"
@@ -130,135 +146,68 @@
                   </div>
                 </div>
                 <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">Giới tính</div>
-                  <select id="cbxGender" class="m-control">
-                    <option value="1">Nam</option>
-                    <option value="0">Nữ</option>
-                  </select>
-                </div>
-              </div>
-              <div class="m-row m-flex">
-                <div class="m-col m-flex-1">
-                  <div class="m-label">
-                    Email (<span class="label-required">*</span>)
-                  </div>
+                  <div class="m-label">Nơi cấp</div>
                   <div class="m-control">
                     <input
-                      id="txtEmail"
-                      fieldName="Email"
-                      type="email"
-                      required
-                      placeholder="example@domain.com"
-                      v-model="Employee.Email"
-                    />
-                  </div>
-                </div>
-                <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">
-                    Số điện thoại (<span class="label-required">*</span>)
-                  </div>
-                  <div class="m-control">
-                    <input
-                      id="txtPhoneNumber"
-                      fieldName="FullName"
+                      id="txtIdentityPlace"
+                      fieldName="PhoneNumber"
                       class="input-required"
                       type="text"
-                      required
-                      v-model="Employee.PhoneNumber"
                     />
                   </div>
                 </div>
               </div>
-              <div class="group-label-info" style="margin-top: 30px">
-                B. Thông tin công việc:
-              </div>
-              <hr class="hr-group-label" />
-              <div class="m-row m-flex">
-                <div class="m-flex-1">
-                  <div class="m-label">Vị trí</div>
-                  <select
-                    id="cbxPosition"
-                    class="m-control"
-                    v-model="Employee.EmployeePositionId"
-                  >
-                    <option
-                      v-for="(item, index) in listEmployeePosition"
-                      :key="index"
-                      :value="item.EmployeePositionId"
-                    >
-                      {{ item.EmployeePositionName }}
-                    </option>
-                    <!-- <option value="19165ed7-212e-21c4-0428-030d4265475f">
-                      Nhân viên
-                    </option> -->
-                  </select>
+              <button @click="ShowTrue" class="dialog-contact">Liên hệ</button>
+              <button @click="ShowFalse" class="dialog-contact">
+                Tài khoản ngân hàng
+              </button>
+              <div v-show="checkShowIsTrue == true" class="area2">
+                <div class="m-row m-flex mg-left-10px mg-right-10px">
+                  <div class="m-flex-1">
+                    <div class="m-label">Nơi cấp</div>
+                    <div class="m-control">
+                      <input
+                        id="txtIdentityPlace"
+                        fieldName="PhoneNumber"
+                        class="input-required"
+                        type="text"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">Phòng ban</div>
-                  <select
-                    v-model="Employee.EmployeeDepartmentId"
-                    class="m-control"
-                  >
-                    <option
-                      v-for="(item, index) in listEmployeeDepartment"
-                      :key="index"
-                      :value="item.EmployeeDepartmentId"
-                    >
-                      {{ item.EmployeeDepartmentName }}
-                    </option>
-                    <!-- <option value="19165ed7-212e-21c4-0428-030d4265475f">
-                      Phòng đào tạo
-                    </option> -->
-                  </select>
+                <div class="m-row m-flex mg-left-10px">
+                  <div class="m-flex-0">
+                    <div class="m-label">Mã số thuế cá nhân</div>
+                    <div class="m-control">
+                      <input id="txtAddress" fieldName="Address" type="text" />
+                    </div>
+                  </div>
+                  <div class="m-flex-0 mg-left-10px">
+                    <div class="m-label">Mức lương cơ bản</div>
+                    <div class="m-control">
+                      <input
+                        id="txtSalary"
+                        fieldName="Salary"
+                        type="text"
+                        style="text-align: right; padding-right: 56px"
+                      />
+                      <!-- <span class="currency-for-input">(VNĐ)</span> -->
+                    </div>
+                  </div>
+                  <div class="m-flex-0 mg-left-10px">
+                    <div class="m-label">Mã số thuế cá nhân</div>
+                    <div class="m-control">
+                      <input id="txtAddress" fieldName="Address" type="text" />
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="m-row m-flex">
-                <div class="m-flex-1">
+              <div v-show="checkShowIsTrue == false">
+                <div class="m-flex-0">
                   <div class="m-label">Mã số thuế cá nhân</div>
                   <div class="m-control">
                     <input id="txtAddress" fieldName="Address" type="text" />
                   </div>
-                </div>
-                <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">Mức lương cơ bản</div>
-                  <div class="m-control">
-                    <input
-                      id="txtSalary"
-                      fieldName="Salary"
-                      type="text"
-                      style="text-align: right; padding-right: 56px"
-                    /><span class="currency-for-input">(VNĐ)</span>
-                  </div>
-                </div>
-              </div>
-              <div class="m-row m-flex">
-                <div class="m-flex-1">
-                  <div class="m-label">Ngày gia nhập</div>
-                  <input
-                    class="m-combobox-input"
-                    type="date"
-                    autocomplete="off"
-                  />
-                </div>
-                <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">Tình trạng công việc</div>
-                  <select
-                    id="cboWorkStatus"
-                    fieldName="CustomerGroupName"
-                    fieldValue="CustomerGroupId"
-                    api="/api/customergroups"
-                    class="m-control"
-                  >
-                    <option value="19165ed7-212e-21c4-0428-030d4265475f">
-                      Đang làm việc
-                    </option>
-                    <option value="19165ed7-212e-21c4-0428-030d4265475f">
-                      Đang thử việc
-                    </option>
-                    <option value="19165ed7-212e-21c4-0428-030d4265475f">
-                      Nghỉ việc
-                    </option>
-                  </select>
                 </div>
               </div>
             </div>
@@ -296,10 +245,17 @@ export default {
       listEmployeeDepartment: [],
       listEmployeePosition: [],
       dialog: false,
-      display: "none"
+      display: "none",
+      checkShowIsTrue: true
     };
   },
   methods: {
+    ShowTrue() {
+      this.checkShowIsTrue = true;
+    },
+    ShowFalse() {
+      this.checkShowIsTrue = false;
+    },
     dragElement(e) {
       var pos1 = 0,
         pos2 = 0,
@@ -393,12 +349,23 @@ export default {
 .dialog-header {
   position: relative;
   height: 40px;
-  line-height: 60px;
+  /* line-height: 60px; */
   padding-left: 16px;
   display: flex;
   font-size: 24px;
+  display: flex;
+  align-items: center;
 }
-
+.dialog-header-help {
+  position: absolute;
+  right: 50px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+}
 .dialog-header-close {
   position: absolute;
   right: 16px;
@@ -406,7 +373,6 @@ export default {
   height: 24px;
   border-radius: 50%;
   cursor: pointer;
-  top: 10px;
   align-items: center;
   border: none;
   background-color: transparent;
@@ -424,10 +390,10 @@ export default {
 }
 
 .dialog-content {
-  height: 530px;
+  height: 550px;
   position: fixed;
   border-radius: 5px;
-  width: 730px;
+  width: 835px;
   background-color: #fff;
   left: calc(50% - 325px);
   top: calc(50% - 300px);
@@ -536,6 +502,9 @@ a {
 
 .mg-left-10px {
   margin-left: 10px;
+}
+.mg-right-10px {
+  margin-right: 10px;
 }
 .mg-left-20px {
   margin-left: 20px;
