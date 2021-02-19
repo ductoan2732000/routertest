@@ -16,6 +16,7 @@
 .area2 {
   border: 1px solid #ccc;
   height: 190px;
+  overflow: auto;
 }
 .dialog-contact {
   min-width: 60px;
@@ -47,5 +48,33 @@
   cursor: pointer;
   background-color: #d2cfcf;
   border: none;
-  margin-top: 19px;
+  margin-top: 3px;
+}
+#table-bank {
+  width: 100%;
+  border-collapse: collapse;
+}
+#table-bank thead tr {
+  width: 100%;
+}
+#table-bank thead th {
+  height: 50px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+  min-width: 20px;
+  border-right: 1px solid #ccc;
+  padding-left: 10px;
+}
+#table-bank tbody td {
+  height: 44px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  padding-left: 10px;
+}
+#table-bank tbody tr {
+  width: 100%;
+}
+#table-bank thead {
+  border-bottom: 1px solid #ccc;
 }

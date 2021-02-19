@@ -30,7 +30,7 @@
       </div> -->
     </div>
     <div class="data-content">
-      <table id="data-table" cellspacing="0" cellpadding="0">
+      <table id="data-table" >
         <thead>
           <tr>
             <!-- <th></th> -->
@@ -123,7 +123,7 @@ export default {
       employees: [],
       page: [1, 2, 3, 4],
       number: 0,
-      limit: 10,
+      limit: 60,
       ofset: 0,
       isHideParent: true,
       checkedRow: {},

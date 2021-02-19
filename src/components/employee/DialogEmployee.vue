@@ -98,11 +98,11 @@
                     class="m-control"
                     v-model="Employee.DepartmentId"
                   >
+                    <option disabled value="">Chọn vị trí</option>
                     <option
                       v-for="(item, index) in listEmployeeDepartment"
                       :key="index"
                       :value="item.DepartmentId"
-                      
                     >
                       {{ item.DepartmentName }}
                     </option>
@@ -233,69 +233,32 @@
               </div>
               <div v-show="checkShowIsTrue == false">
                 <div class="area2">
-                  <div class="m-row mg-top-0 m-flex backgroundgray">
-                    <div class="m-col m-flex-3 mg-left-10px">
-                      <div class="m-label">
-                        Số tài khoản (<span class="label-required">*</span>)
-                      </div>
-                      <div class="m-control">
-                        <input
-                          id="txtEmployeeCode"
-                          fieldName="EmployeeCode"
-                          required
-                          class="input-required"
-                          :class="{ 'border-red': checkRequiredInput() }"
-                          @blur="checkRequiredInput(Employee.EmployeeCode)"
-                          type="text"
-                          v-model="Employee.BankCode"
-                        />
-                      </div>
-                    </div>
-                    <div class="m-flex-3 mg-left-10px">
-                      <div class="m-label">
-                        Tên ngân hàng (<span class="label-required">*</span>)
-                      </div>
-                      <div class="m-control">
-                        <input
-                          id="txtFullName"
-                          fieldName="FullName"
-                          class="input-required"
-                          type="text"
-                          required
-                          v-model="Employee.BankName"
-                        />
-                      </div>
-                    </div>
-                    <div class="m-flex-3 mg-left-10px">
-                      <div class="m-label">Chi nhánh</div>
-                      <div class="m-control">
-                        <input
-                          id="txtFullName"
-                          fieldName="FullName"
-                          class="input-required"
-                          type="text"
-                          required
-                          v-model="Employee.BankBranch"
-                        />
-                      </div>
-                    </div>
-                    <div class="m-flex-4 mg-left-10px">
-                      <div class="m-label">Tỉnh/Tp ngân hàng</div>
-                      <div class="m-control">
-                        <input
-                          id="txtFullName"
-                          fieldName="FullName"
-                          class="input-required"
-                          type="text"
-                          required
-                          v-model="Employee.BankLocation"
-                        />
-                      </div>
-                    </div>
-                    <div class="m-flex-1 mg-left-10px">
-                      <button class="btn-delete"></button>
-                    </div>
-                  </div>
+                  <table id="table-bank" cellspacing="0" cellpadding="0">
+                    <thead>
+                      <tr>
+                        <th>
+                          Số tài khoản (<span class="label-required">*</span>)
+                        </th>
+                        <th>
+                          Tên ngân hàng (<span class="label-required">*</span>)
+                        </th>
+                        <th>Chi nhánh</th>
+                        <th>Tỉnh/Tp ngân hàng</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(item, index) in listBank" :key="index">
+                        <td>{{ item.BankCode }}</td>
+                        <td>{{ item.BankName }}</td>
+                        <td>{{ item.BankBranch }}</td>
+                        <td>{{ item.BankLocation }}</td>
+                        <td>
+                          <button class="btn-delete"></button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <div class="m-row mg-top-0 m-flex">
                     <button class="m-col mg-left-10px btn-area2">
                       Thêm dòng
@@ -317,13 +280,23 @@
           >
             Hủy
           </button>
-          <button
-            id="btnSave"
-            class="m-btn m-btn-default btn-haveicon"
-            v-on:click="saveEmployee"
-          >
-            <i class="far fa-save"></i><span class="btn-text">Lưu</span>
-          </button>
+          <div class="addout-add">
+            <button
+              id="btnSave"
+              class="m-btn m-btn-default"
+              v-on:click="saveEmployee"
+            >
+              <i class="far fa-save"></i><span class="btn-text">Cất</span>
+            </button>
+            <button
+              id="btnSave"
+              class="m-btn m-btn-default mg-left-10px"
+              v-on:click="saveAndAddEmployee"
+            >
+              <i class="far fa-save"></i
+              ><span class="btn-text">Cất và thêm</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -339,37 +312,38 @@ export default {
     return {
       Employee: {
         EmployeeId: "6207a9a7-3bf9-7288-8565-390639088226",
-        EmployeeCode: "NV00001",
-        FullName: "Mai Minh Nam",
-        DateOfBirth: "1967-06-26T00:00:00",
-        Gender: 1,
-        IdentityCard: "9683 1939 9383",
-        IdentityDate: "1991-04-25",
-        IdentityLocation: "Hà Nội",
-        Email: "ShakiraBruns@gmail.com",
-        PhoneNumber: "(172) 161-1565",
-        PositionGroupId: "27f91d6c-14b1-6c74-92ef-c9d5c2d91e91",
-        DepartmentId: "45ac3d26-18f2-18a9-3031-644313fbb055",
-        PersonalTaxCode: "1271",
-        BasicSalary: "03.319.272",
-        JoiningDate: "1970-01-01T00:01:22",
-        Status: 1,
-        CreatedDate: "1985-06-14T17:47:34",
-        CreatedBy: "Trần Văn Anh",
-        ModifiedDate: "2013-12-06T22:43:24",
-        ModifiedBy: "Đinh Tú Ngân",
-        PositionName: "Giám đốc",
-        DepartmentName: "Phòng đô đốc",
-        Title: "Miss",
-        Branch: "Công ty nhà nước",
-        BankCode: "4587 8744 5247",
-        BankName: "Agribank",
-        BankBranch: "Chi nhánh xã",
-        BankLocation: "Nam Định",
-        PhoneLandline: "(551) 206-6985",
-        Address: "Quảng Bình"
+        EmployeeCode: "",
+        FullName: "",
+        DateOfBirth: "",
+        Gender: 0,
+        IdentityCard: "",
+        IdentityDate: "",
+        IdentityLocation: "",
+        Email: "",
+        PhoneNumber: "",
+        PositionGroupId: "6528b15d-6674-724f-79a4-4b24de418577",
+        DepartmentId: "",
+        PersonalTaxCode: "",
+        BasicSalary: "",
+        JoiningDate: "",
+        Status: null,
+        CreatedDate: "",
+        CreatedBy: "",
+        ModifiedDate: "",
+        ModifiedBy: "",
+        PositionName: "Phó giám đốc",
+        DepartmentName: "",
+        Title: "",
+        Branch: "",
+        BankCode: "",
+        BankName: "",
+        BankBranch: "",
+        BankLocation: "",
+        PhoneLandline: "",
+        Address: ""
       },
       listEmployeeDepartment: [],
+      listBank: [],
       listEmployeePosition: [],
       dialog: false,
       display: "none",
@@ -434,11 +408,14 @@ export default {
     async saveEmployee() {
       console.log(this.Employee);
       const response = await axios.post(
-        "https://localhost:44364/api/employees",
+        "https://localhost:44373/api/v1/Employees",
         this.Employee
       );
 
       console.log(response);
+    },
+    saveAndAddEmployee() {
+      console.log("hello");
     },
     checkRequiredInput(text) {
       if (text == "" || text == null) {
@@ -451,15 +428,17 @@ export default {
         .get("https://localhost:44373/api/v1/Departments")
         .then(response => (this.listEmployeeDepartment = response.data.Data));
       console.log(this.listEmployeeDepartment);
+    },
+    async getListBank() {
+      await axios
+        .get("https://localhost:44373/api/v1/Banks")
+        .then(response => (this.listBank = response.data.Data));
+      console.log(this.listBank);
     }
-    // async getListEmployeePosition() {
-    //   await axios
-    //     .get("https://localhost:44364/api/employeepositions")
-    //     .then(response => (this.listEmployeePosition = response.data));
-    // }
   },
   created() {
     this.getListEmployeeDepartment();
+    this.getListBank();
     //this.Employee.EmployeeDepartment.EmployeeDepartmentId = this.listEmployeeDepartment[0];
     //console.log(this.Employee.EmployeeDepartment.EmployeeDepartmentId);
     // this.getListEmployeePosition();
@@ -550,9 +529,12 @@ export default {
   background-color: #e9ebee;
   border-radius: 0 0 5px 5px;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 12px 24px;
   box-sizing: border-box;
+}
+.addout-add {
+  display: flex;
 }
 .el-avatar-employee {
   padding-top: 16px;
