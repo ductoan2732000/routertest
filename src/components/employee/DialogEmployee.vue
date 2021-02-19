@@ -34,7 +34,7 @@
             </div> -->
             <div class="m-col el-left m-flex-4">
               <div class="m-row mg-top-0 m-flex">
-                <div class="m-col m-flex-0">
+                <div class="m-col m-flex-2">
                   <div class="m-label">
                     Mã (<span class="label-required">*</span>)
                   </div>
@@ -51,7 +51,7 @@
                     />
                   </div>
                 </div>
-                <div class="m-flex-0 mg-left-10px">
+                <div class="m-flex-3 mg-left-10px">
                   <div class="m-label">
                     Họ và tên (<span class="label-required">*</span>)
                   </div>
@@ -66,7 +66,7 @@
                     />
                   </div>
                 </div>
-                <div class="m-flex-0 mg-left-10px">
+                <div class="m-flex-2 mg-left-10px">
                   <div class="m-label">Ngày sinh</div>
                   <input
                     class="m-combobox-input"
@@ -75,44 +75,48 @@
                     v-model="Employee.DateOfBirth"
                   />
                 </div>
-                <div class="m-flex-1 mg-left-10px">
+                <div class="m-flex-2 mg-left-10px">
                   <div class="m-label">Giới tính</div>
                   <select
                     id="cbxGender"
                     class="m-control"
                     v-model="Employee.Gender"
                   >
-                    <option value="1">Nam</option>
-                    <option value="0">Nữ</option>
+                    <option value="0">Nam</option>
+                    <option value="1">Nữ</option>
+                    <option value="2">Khác</option>
                   </select>
                 </div>
               </div>
               <div class="m-row m-flex">
-                <div class="m-flex-1">
-                  <div class="m-label">Vị trí</div>
+                <div class="m-flex-6">
+                  <div class="m-label">
+                    Đơn vị (<span class="label-required">*</span>)
+                  </div>
                   <select
                     id="cbxPosition"
                     class="m-control"
-                    v-model="Employee.EmployeePositionId"
+                    v-model="Employee.DepartmentId"
                   >
                     <option
-                      v-for="(item, index) in listEmployeePosition"
+                      v-for="(item, index) in listEmployeeDepartment"
                       :key="index"
-                      :value="item.EmployeePositionId"
+                      :value="item.DepartmentId"
+                      
                     >
-                      {{ item.EmployeePositionName }}
+                      {{ item.DepartmentName }}
                     </option>
                     <!-- <option value="19165ed7-212e-21c4-0428-030d4265475f">
                       Nhân viên
                     </option> -->
                   </select>
                 </div>
-                <div class="m-flex-0 mg-left-10px">
+                <div class="m-flex-3 mg-left-10px">
                   <div
                     class="m-label"
                     title="Số chứng minh thư nhân dân hoặc căn cước công dân"
                   >
-                    Đơn vị (<span class="label-required">*</span>)
+                    Số CMND
                   </div>
                   <div class="m-control">
                     <input
@@ -120,28 +124,30 @@
                       fieldName="text"
                       type="text"
                       required
-                      v-model="Employee.IdentityCardNumber"
+                      v-model="Employee.IdentityCard"
                     />
                   </div>
                 </div>
-                <div class="m-flex-0 mg-left-10px">
+                <div class="m-flex-2 mg-left-10px">
                   <div class="m-label">Ngày cấp</div>
                   <input
                     class="m-combobox-input"
                     type="date"
                     autocomplete="off"
+                    v-model="Employee.IdentityDate"
                   />
                 </div>
               </div>
               <div class="m-row m-flex">
                 <div class="m-flex-1">
-                  <div class="m-label">Nơi cấp</div>
+                  <div class="m-label">Chức danh</div>
                   <div class="m-control">
                     <input
                       id="txtIdentityPlace"
                       fieldName="PhoneNumber"
                       class="input-required"
                       type="text"
+                      v-model="Employee.Title"
                     />
                   </div>
                 </div>
@@ -153,60 +159,150 @@
                       fieldName="PhoneNumber"
                       class="input-required"
                       type="text"
+                      v-model="Employee.IdentityLocation"
                     />
                   </div>
                 </div>
               </div>
-              <button @click="ShowTrue" class="dialog-contact">Liên hệ</button>
-              <button @click="ShowFalse" class="dialog-contact">
+              <button
+                @click="ShowTrue"
+                class="dialog-contact"
+                :class="{ backgoundblue: checkShowIsTrue }"
+              >
+                Liên hệ
+              </button>
+              <button
+                @click="ShowFalse"
+                class="dialog-contact"
+                :class="{ backgoundblue: !checkShowIsTrue }"
+              >
                 Tài khoản ngân hàng
               </button>
               <div v-show="checkShowIsTrue == true" class="area2">
                 <div class="m-row m-flex mg-left-10px mg-right-10px">
                   <div class="m-flex-1">
-                    <div class="m-label">Nơi cấp</div>
+                    <div class="m-label">Địa chỉ</div>
                     <div class="m-control">
                       <input
                         id="txtIdentityPlace"
                         fieldName="PhoneNumber"
                         class="input-required"
                         type="text"
+                        v-model="Employee.Address"
                       />
                     </div>
                   </div>
                 </div>
                 <div class="m-row m-flex mg-left-10px">
                   <div class="m-flex-0">
-                    <div class="m-label">Mã số thuế cá nhân</div>
+                    <div class="m-label">DT di động</div>
                     <div class="m-control">
-                      <input id="txtAddress" fieldName="Address" type="text" />
+                      <input
+                        id="txtAddress"
+                        fieldName="Address"
+                        type="text"
+                        v-model="Employee.PhoneNumber"
+                      />
                     </div>
                   </div>
                   <div class="m-flex-0 mg-left-10px">
-                    <div class="m-label">Mức lương cơ bản</div>
+                    <div class="m-label">DT cố định</div>
                     <div class="m-control">
                       <input
-                        id="txtSalary"
-                        fieldName="Salary"
+                        id="txtAddress"
+                        fieldName="Address"
                         type="text"
-                        style="text-align: right; padding-right: 56px"
+                        v-model="Employee.PhoneLandline"
                       />
+
                       <!-- <span class="currency-for-input">(VNĐ)</span> -->
                     </div>
                   </div>
                   <div class="m-flex-0 mg-left-10px">
-                    <div class="m-label">Mã số thuế cá nhân</div>
+                    <div class="m-label">Email</div>
                     <div class="m-control">
-                      <input id="txtAddress" fieldName="Address" type="text" />
+                      <input
+                        id="txtAddress"
+                        fieldName="Address"
+                        type="text"
+                        v-model="Employee.Email"
+                      />
                     </div>
                   </div>
                 </div>
               </div>
               <div v-show="checkShowIsTrue == false">
-                <div class="m-flex-0">
-                  <div class="m-label">Mã số thuế cá nhân</div>
-                  <div class="m-control">
-                    <input id="txtAddress" fieldName="Address" type="text" />
+                <div class="area2">
+                  <div class="m-row mg-top-0 m-flex backgroundgray">
+                    <div class="m-col m-flex-3 mg-left-10px">
+                      <div class="m-label">
+                        Số tài khoản (<span class="label-required">*</span>)
+                      </div>
+                      <div class="m-control">
+                        <input
+                          id="txtEmployeeCode"
+                          fieldName="EmployeeCode"
+                          required
+                          class="input-required"
+                          :class="{ 'border-red': checkRequiredInput() }"
+                          @blur="checkRequiredInput(Employee.EmployeeCode)"
+                          type="text"
+                          v-model="Employee.BankCode"
+                        />
+                      </div>
+                    </div>
+                    <div class="m-flex-3 mg-left-10px">
+                      <div class="m-label">
+                        Tên ngân hàng (<span class="label-required">*</span>)
+                      </div>
+                      <div class="m-control">
+                        <input
+                          id="txtFullName"
+                          fieldName="FullName"
+                          class="input-required"
+                          type="text"
+                          required
+                          v-model="Employee.BankName"
+                        />
+                      </div>
+                    </div>
+                    <div class="m-flex-3 mg-left-10px">
+                      <div class="m-label">Chi nhánh</div>
+                      <div class="m-control">
+                        <input
+                          id="txtFullName"
+                          fieldName="FullName"
+                          class="input-required"
+                          type="text"
+                          required
+                          v-model="Employee.BankBranch"
+                        />
+                      </div>
+                    </div>
+                    <div class="m-flex-4 mg-left-10px">
+                      <div class="m-label">Tỉnh/Tp ngân hàng</div>
+                      <div class="m-control">
+                        <input
+                          id="txtFullName"
+                          fieldName="FullName"
+                          class="input-required"
+                          type="text"
+                          required
+                          v-model="Employee.BankLocation"
+                        />
+                      </div>
+                    </div>
+                    <div class="m-flex-1 mg-left-10px">
+                      <button class="btn-delete"></button>
+                    </div>
+                  </div>
+                  <div class="m-row mg-top-0 m-flex">
+                    <button class="m-col mg-left-10px btn-area2">
+                      Thêm dòng
+                    </button>
+                    <button class="m-col mg-left-10px btn-area2">
+                      Xóa hết dòng
+                    </button>
                   </div>
                 </div>
               </div>
@@ -241,7 +337,38 @@ export default {
   },
   data() {
     return {
-      Employee: {},
+      Employee: {
+        EmployeeId: "6207a9a7-3bf9-7288-8565-390639088226",
+        EmployeeCode: "NV00001",
+        FullName: "Mai Minh Nam",
+        DateOfBirth: "1967-06-26T00:00:00",
+        Gender: 1,
+        IdentityCard: "9683 1939 9383",
+        IdentityDate: "1991-04-25",
+        IdentityLocation: "Hà Nội",
+        Email: "ShakiraBruns@gmail.com",
+        PhoneNumber: "(172) 161-1565",
+        PositionGroupId: "27f91d6c-14b1-6c74-92ef-c9d5c2d91e91",
+        DepartmentId: "45ac3d26-18f2-18a9-3031-644313fbb055",
+        PersonalTaxCode: "1271",
+        BasicSalary: "03.319.272",
+        JoiningDate: "1970-01-01T00:01:22",
+        Status: 1,
+        CreatedDate: "1985-06-14T17:47:34",
+        CreatedBy: "Trần Văn Anh",
+        ModifiedDate: "2013-12-06T22:43:24",
+        ModifiedBy: "Đinh Tú Ngân",
+        PositionName: "Giám đốc",
+        DepartmentName: "Phòng đô đốc",
+        Title: "Miss",
+        Branch: "Công ty nhà nước",
+        BankCode: "4587 8744 5247",
+        BankName: "Agribank",
+        BankBranch: "Chi nhánh xã",
+        BankLocation: "Nam Định",
+        PhoneLandline: "(551) 206-6985",
+        Address: "Quảng Bình"
+      },
       listEmployeeDepartment: [],
       listEmployeePosition: [],
       dialog: false,
@@ -321,20 +448,21 @@ export default {
     },
     async getListEmployeeDepartment() {
       await axios
-        .get("https://localhost:44364/api/employeedepartments")
-        .then(response => (this.listEmployeeDepartment = response.data));
-    },
-    async getListEmployeePosition() {
-      await axios
-        .get("https://localhost:44364/api/employeepositions")
-        .then(response => (this.listEmployeePosition = response.data));
+        .get("https://localhost:44373/api/v1/Departments")
+        .then(response => (this.listEmployeeDepartment = response.data.Data));
+      console.log(this.listEmployeeDepartment);
     }
+    // async getListEmployeePosition() {
+    //   await axios
+    //     .get("https://localhost:44364/api/employeepositions")
+    //     .then(response => (this.listEmployeePosition = response.data));
+    // }
   },
   created() {
     this.getListEmployeeDepartment();
     //this.Employee.EmployeeDepartment.EmployeeDepartmentId = this.listEmployeeDepartment[0];
     //console.log(this.Employee.EmployeeDepartment.EmployeeDepartmentId);
-    this.getListEmployeePosition();
+    // this.getListEmployeePosition();
   }
 };
 </script>
@@ -838,5 +966,11 @@ input.border-red {
 #move-dialog {
   cursor: move;
   z-index: 10;
+}
+.backgoundblue {
+  background-color: #019160;
+}
+.backgroundgray {
+  background-color: #d2cfcf;
 }
 </style>

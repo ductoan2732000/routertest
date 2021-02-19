@@ -53,18 +53,6 @@
 .btn-fresh:hover {
   background-color: #bbbbbb;
 }
-.btn-delete {
-  background-image: url("../../assets/icon/icons8-delete-bin-64.png");
-  background-repeat: no-repeat;
-  width: 40px;
-  height: 40px;
-  background-position: center;
-  background-size: 25px;
-  border: 1px solid #bbbbbb;
-  outline: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
 .btn-delete:hover {
   background-color: #e24529;
 } 
