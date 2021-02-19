@@ -167,7 +167,8 @@ export default {
     formartStatus(Status) {
       if (Status == 0) return "Đang làm việc";
       else if (Status == 1) return "Đang công tác";
-      else return "Đã nghỉ việc";
+      else if (Status == 2) return "Đã nghỉ việc";
+      else return "";
     },
     btnAdd() {
       this.isHideParent = false;
