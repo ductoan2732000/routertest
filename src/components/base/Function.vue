@@ -42,7 +42,8 @@ export default {
     }
   },
   props: {
-    Datas: Object
+    Datas: Object,
+    dataId: String
   }
 };
 </script>
