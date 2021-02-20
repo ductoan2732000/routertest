@@ -30,7 +30,7 @@
       </div> -->
     </div>
     <div class="data-content">
-      <table id="data-table" >
+      <table id="data-table">
         <thead>
           <tr>
             <!-- <th></th> -->
@@ -63,8 +63,12 @@
             <td>{{ formartStatus(item.Status) }}</td>
             <td>{{ item.Branch }}</td>
             <td class="functions">
-              <button class="adjuss">Sửa</button>
-              <Function :Datas="Functions" />
+              <button class="adjuss" @click="UpdateData(item)">Sửa</button>
+              <Function
+                :Datas="Functions"
+                :dataId="item.EmployeeId"
+                @ClickAnItemChoose="chooseFunctionData($event, item.EmployeeId)"
+              />
             </td>
           </tr>
         </tbody>
@@ -106,7 +110,14 @@
         @ClickAnItemChoose="updateNumber($event)"
       />
     </div>
-    <Dialog :isHide="isHideParent" @closePopup="closePopup"></Dialog>
+    <Dialog
+      :isHide="isHideParent"
+      :Employee="employeeTemp"
+      :checkShowIsTrue="checkBankIsTrue"
+      @closePopup="closePopup"
+      @checkShowIsTrueContact="checkShowIsTrueContact($event)"
+      @checkShowIsTrueBank="checkShowIsTrueBank($event)"
+    ></Dialog>
   </div>
 </template>
 
@@ -120,12 +131,78 @@ export default {
   name: "Employee",
   data() {
     return {
+      EmployeeOrigin: {
+        EmployeeId: "00000000-0000-0000-0000-000000000000",
+        EmployeeCode: "",
+        FullName: "",
+        DateOfBirth: "",
+        Gender: 0,
+        IdentityCard: "",
+        IdentityDate: "",
+        IdentityLocation: "",
+        Email: "",
+        PhoneNumber: "",
+        PositionGroupId: "6528b15d-6674-724f-79a4-4b24de418577",
+        DepartmentId: "",
+        PersonalTaxCode: "",
+        BasicSalary: "",
+        JoiningDate: "",
+        Status: null,
+        CreatedDate: "",
+        CreatedBy: "",
+        ModifiedDate: "",
+        ModifiedBy: "",
+        PositionName: "Phó giám đốc",
+        DepartmentName: "",
+        Title: "",
+        Branch: "",
+        BankCode: "",
+        BankName: "",
+        BankBranch: "",
+        BankLocation: "",
+        PhoneLandline: "",
+        Address: ""
+      },
+      EmployeeBackUp: {},
       employees: [],
       page: [1, 2, 3, 4],
       number: 0,
-      limit: 60,
+      limit: 100,
       ofset: 0,
       isHideParent: true,
+      checkBankIsTrue: true,
+      employeeTemp: {
+        EmployeeId: "00000000-0000-0000-0000-000000000000",
+        EmployeeCode: "",
+        FullName: "",
+        DateOfBirth: "",
+        Gender: 0,
+        IdentityCard: "",
+        IdentityDate: "",
+        IdentityLocation: "",
+        Email: "",
+        PhoneNumber: "",
+        PositionGroupId: "6528b15d-6674-724f-79a4-4b24de418577",
+        DepartmentId: "",
+        PersonalTaxCode: "",
+        BasicSalary: "",
+        JoiningDate: "",
+        Status: null,
+        CreatedDate: "",
+        CreatedBy: "",
+        ModifiedDate: "",
+        ModifiedBy: "",
+        PositionName: "Phó giám đốc",
+        DepartmentName: "",
+        Title: "",
+        Branch: "",
+        BankCode: "",
+        BankName: "",
+        BankBranch: "",
+        BankLocation: "",
+        PhoneLandline: "",
+        Address: ""
+      },
       checkedRow: {},
       DeleteOnTrue: this.clickDelete(),
       // SelectDepartments: {
@@ -172,9 +249,50 @@ export default {
     },
     btnAdd() {
       this.isHideParent = false;
+      this.checkBankIsTrue = true;
+      this.employeeTemp = { ...this.EmployeeOrigin };
+    },
+    datetimeToDate(str) {
+      return str.slice(0, 10);
+    },
+    UpdateData(data) {
+      this.EmployeeBackUp = { ...data };
+      if (this.EmployeeBackUp.DateOfBirth != null) {
+        this.EmployeeBackUp.DateOfBirth = this.datetimeToDate(
+          this.EmployeeBackUp.DateOfBirth
+        );
+      }
+      if (this.EmployeeBackUp.IdentityDate != null) {
+        this.EmployeeBackUp.IdentityDate = this.datetimeToDate(
+          this.EmployeeBackUp.IdentityDate
+        );
+      }
+      this.isHideParent = false;
+      this.checkBankIsTrue = true;
+      this.employeeTemp = this.EmployeeBackUp;
+      // const response = await axios
+      //   .get(
+      //     "https://localhost:44373/api/v1/Banks/EmployeeId?id=" +
+      //       this.EmployeeBackUp.EmployeeId
+      //   )
+      //   .then(response => (this.listBank = response.data.Data));
+    },
+    async chooseFunctionData(e, dataId) {
+      if (e == this.Functions.items[1]) {
+        const response = await axios.delete(
+          "https://localhost:44373/api/v1/Employees?id=" + dataId
+        );
+        location.reload();
+      }
     },
     closePopup() {
       this.isHideParent = true;
+    },
+    checkShowIsTrueContact(e) {
+      this.checkBankIsTrue = true;
+    },
+    checkShowIsTrueBank() {
+      this.checkBankIsTrue = false;
     },
     clickRefresh() {
       location.reload();

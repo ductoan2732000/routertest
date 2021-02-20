@@ -249,10 +249,12 @@
                     </thead>
                     <tbody>
                       <tr v-for="(item, index) in listBank" :key="index">
-                        <td>{{ item.BankCode }}</td>
-                        <td>{{ item.BankName }}</td>
-                        <td>{{ item.BankBranch }}</td>
-                        <td>{{ item.BankLocation }}</td>
+                        <td><input type="text" v-model="item.BankCode" /></td>
+                        <td><input type="text" v-model="item.BankName" /></td>
+                        <td><input type="text" v-model="item.BankBranch" /></td>
+                        <td>
+                          <input type="text" v-model="item.BankLocation" />
+                        </td>
                         <td>
                           <button class="btn-delete"></button>
                         </td>
@@ -260,10 +262,16 @@
                     </tbody>
                   </table>
                   <div class="m-row mg-top-0 m-flex">
-                    <button class="m-col mg-left-10px btn-area2">
+                    <button
+                      class="m-col mg-left-10px btn-area2"
+                      @click="addNewBank(Employee.EmployeeId)"
+                    >
                       Thêm dòng
                     </button>
-                    <button class="m-col mg-left-10px btn-area2">
+                    <button
+                      class="m-col mg-left-10px btn-area2"
+                      @click="deleteABank"
+                    >
                       Xóa hết dòng
                     </button>
                   </div>
@@ -306,56 +314,41 @@
 import * as axios from "axios";
 export default {
   props: {
-    isHide: Boolean
+    isHide: Boolean,
+    Employee: Object,
+    checkShowIsTrue: Boolean
   },
   data() {
     return {
-      Employee: {
-        EmployeeId: "6207a9a7-3bf9-7288-8565-390639088226",
-        EmployeeCode: "",
-        FullName: "",
-        DateOfBirth: "",
-        Gender: 0,
-        IdentityCard: "",
-        IdentityDate: "",
-        IdentityLocation: "",
-        Email: "",
-        PhoneNumber: "",
-        PositionGroupId: "6528b15d-6674-724f-79a4-4b24de418577",
-        DepartmentId: "",
-        PersonalTaxCode: "",
-        BasicSalary: "",
-        JoiningDate: "",
-        Status: null,
-        CreatedDate: "",
-        CreatedBy: "",
-        ModifiedDate: "",
-        ModifiedBy: "",
-        PositionName: "Phó giám đốc",
-        DepartmentName: "",
-        Title: "",
-        Branch: "",
+      listEmployeeDepartment: [],
+      listBank: [],
+      listEmployeePosition: [],
+      bankTemp: {
+        BankId: "00000000-0000-0000-0000-000000000000",
         BankCode: "",
         BankName: "",
         BankBranch: "",
         BankLocation: "",
-        PhoneLandline: "",
-        Address: ""
+        EmployeeId: "00000000-0000-0000-0000-000000000000"
       },
-      listEmployeeDepartment: [],
-      listBank: [],
-      listEmployeePosition: [],
       dialog: false,
-      display: "none",
-      checkShowIsTrue: true
+      display: "none"
+      // checkShowIsTrue: true
     };
   },
   methods: {
     ShowTrue() {
-      this.checkShowIsTrue = true;
+      this.$emit("checkShowIsTrueContact", true);
+      // this.checkShowIsTrue = true;
     },
     ShowFalse() {
-      this.checkShowIsTrue = false;
+      // this.checkShowIsTrue = false;
+      this.$emit("checkShowIsTrueBank", false);
+      if (this.Employee.EmployeeId == "00000000-0000-0000-0000-000000000000") {
+        this.listBank = [];
+      } else {
+        this.getBankById();
+      }
     },
     dragElement(e) {
       var pos1 = 0,
@@ -405,18 +398,46 @@ export default {
     rowOnClick(employee) {
       alert(employee.FullName);
     },
+    addNewBank(Id) {
+      this.bankTemp.EmployeeId = Id;
+      this.listBank.push({ ...this.bankTemp });
+    },
+    deleteABank() {
+      this.bankTemp.EmployeeId = this.Employee.EmployeeId;
+      this.listBank.push(this.bankTemp);
+    },
     async saveEmployee() {
-      console.log(this.Employee);
-      const response = await axios.post(
-        "https://localhost:44373/api/v1/Employees",
-        this.Employee
-      );
+      if (this.Employee.EmployeeId == "00000000-0000-0000-0000-000000000000") {
+        console.log(this.Employee);
+        const response = await axios.post(
+          "https://localhost:44373/api/v1/Employees",
+          this.Employee
+        );
+        console.log(response);
+      } else {
+        const response = await axios.put(
+          "https://localhost:44373/api/v1/Employees",
+          this.Employee
+        );
+        console.log(response);
+      }
 
-      console.log(response);
+      location.reload();
     },
     saveAndAddEmployee() {
-      console.log("hello");
+      this.saveEmployee();
     },
+    async deleteBank(bankId) {
+      const response = await axios.delete(
+        "https://localhost:44373/api/v1/Banks?id=" + bankId
+      );
+    },
+    async deleteBankByEmpployeeId(employeeId) {
+      const response = await axios.delete(
+        "https://localhost:44373/api/v1/Banks/id?id=" + employeeId
+      );
+    },
+
     checkRequiredInput(text) {
       if (text == "" || text == null) {
         return true;
@@ -429,19 +450,28 @@ export default {
         .then(response => (this.listEmployeeDepartment = response.data.Data));
       console.log(this.listEmployeeDepartment);
     },
-    async getListBank() {
-      await axios
-        .get("https://localhost:44373/api/v1/Banks")
+    // async getListBank() {
+    //   await axios
+    //     .get("https://localhost:44373/api/v1/Banks")
+    //     .then(response => (this.listBank = response.data.Data));
+    //   console.log(this.listBank);
+    // }
+    async getBankById() {
+      const response = await axios
+        .get(
+          "https://localhost:44373/api/v1/Banks/EmployeeId?id=" +
+            this.Employee.EmployeeId
+        )
         .then(response => (this.listBank = response.data.Data));
-      console.log(this.listBank);
     }
   },
   created() {
     this.getListEmployeeDepartment();
-    this.getListBank();
+    // this.getListBank();
     //this.Employee.EmployeeDepartment.EmployeeDepartmentId = this.listEmployeeDepartment[0];
     //console.log(this.Employee.EmployeeDepartment.EmployeeDepartmentId);
     // this.getListEmployeePosition();
+    this.checkShowIsTrue = true;
   }
 };
 </script>
