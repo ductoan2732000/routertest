@@ -113,10 +113,17 @@
     <Dialog
       :isHide="isHideParent"
       :Employee="employeeTemp"
+      :listBank="listBankTemp"
       :checkShowIsTrue="checkBankIsTrue"
+      :checkRequireCode="checkRequireCode"
+      :checkRequireName="checkRequireName"
+      :checkRequireDep="checkRequireDep"
       @closePopup="closePopup"
       @checkShowIsTrueContact="checkShowIsTrueContact($event)"
       @checkShowIsTrueBank="checkShowIsTrueBank($event)"
+      @changeRequireDep="changeRequireDep($event)"
+      @changeRequireName="changeRequireName($event)"
+      @changeRequireCode="changeRequireCode($event)"
     ></Dialog>
   </div>
 </template>
@@ -143,7 +150,7 @@ export default {
         Email: "",
         PhoneNumber: "",
         PositionGroupId: "6528b15d-6674-724f-79a4-4b24de418577",
-        DepartmentId: "",
+        DepartmentId: "00000000-0000-0000-0000-000000000000",
         PersonalTaxCode: "",
         BasicSalary: "",
         JoiningDate: "",
@@ -165,9 +172,12 @@ export default {
       },
       EmployeeBackUp: {},
       employees: [],
+      checkRequireCode: true,
+      checkRequireName: true,
+      checkRequireDep: true,
       page: [1, 2, 3, 4],
       number: 0,
-      limit: 100,
+      limit: 150,
       ofset: 0,
       isHideParent: true,
       checkBankIsTrue: true,
@@ -203,6 +213,8 @@ export default {
         PhoneLandline: "",
         Address: ""
       },
+      listBankOrigin: [],
+      listBankTemp: [],
       checkedRow: {},
       DeleteOnTrue: this.clickDelete(),
       // SelectDepartments: {
@@ -251,11 +263,16 @@ export default {
       this.isHideParent = false;
       this.checkBankIsTrue = true;
       this.employeeTemp = { ...this.EmployeeOrigin };
+      this.employeeTemp.EmployeeCode = "NV00" + this.number.toString();
+      this.checkRequireCode = false;
+      this.checkRequireName = true;
+      this.checkRequireDep = true;
+      this.listBankTemp = [];
     },
     datetimeToDate(str) {
       return str.slice(0, 10);
     },
-    UpdateData(data) {
+    async UpdateData(data) {
       this.EmployeeBackUp = { ...data };
       if (this.EmployeeBackUp.DateOfBirth != null) {
         this.EmployeeBackUp.DateOfBirth = this.datetimeToDate(
@@ -270,6 +287,31 @@ export default {
       this.isHideParent = false;
       this.checkBankIsTrue = true;
       this.employeeTemp = this.EmployeeBackUp;
+      if (
+        this.employeeTemp.EmployeeCode != "" &&
+        this.employeeTemp.EmployeeCode != null
+      ) {
+        this.checkRequireCode = false;
+      } else this.checkRequireCode = true;
+      if (
+        this.employeeTemp.FullName != "" &&
+        this.employeeTemp.FullName != null
+      ) {
+        this.checkRequireName = false;
+      } else this.checkRequireName = true;
+      if (
+        this.employeeTemp.DepartmentId != "" &&
+        this.employeeTemp.DepartmentId != null
+      ) {
+        this.checkRequireDep = false;
+      } else this.checkRequireDep = true;
+      const response = await axios
+        .get(
+          "https://localhost:44373/api/v1/Banks/EmployeeId?id=" +
+            data.EmployeeId
+        )
+        .then(response => (this.listBankOrigin = response.data.Data));
+      this.listBankTemp = [...this.listBankOrigin];
       // const response = await axios
       //   .get(
       //     "https://localhost:44373/api/v1/Banks/EmployeeId?id=" +
@@ -285,6 +327,11 @@ export default {
         location.reload();
       }
     },
+    async getBankById(id) {
+      const response = await axios
+        .get("https://localhost:44373/api/v1/Banks/EmployeeId?id=" + id)
+        .then(response => (this.listBankOrigin = response.data.Data));
+    },
     closePopup() {
       this.isHideParent = true;
     },
@@ -293,6 +340,15 @@ export default {
     },
     checkShowIsTrueBank() {
       this.checkBankIsTrue = false;
+    },
+    changeRequireDep(e) {
+      this.checkRequireDep = e;
+    },
+    changeRequireName(e) {
+      this.checkRequireName = e;
+    },
+    changeRequireCode(e) {
+      this.checkRequireCode = e;
     },
     clickRefresh() {
       location.reload();
