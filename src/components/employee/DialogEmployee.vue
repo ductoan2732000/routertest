@@ -19,7 +19,9 @@
           </div>
           <div class="dialog-header-help"></div>
           <div class="dialog-header-close">
-            <button v-on:click="btnCancelOnClick">x</button>
+            <button v-on:click="btnCancelOnClick" class="btn-x m-btn-default">
+              <i class="far fa-save"></i><span class="btn-text">x</span>
+            </button>
           </div>
         </div>
         <div class="dialog-body">
@@ -41,10 +43,11 @@
                   <div class="m-control">
                     <input
                       id="txtEmployeeCode"
+                      ref="txtEmployeeCode"
                       fieldName="EmployeeCode"
                       required
                       class="input-required"
-                      :class="{ 'border-red': checkRequiredInput() }"
+                      :class="{ 'border-red': this.checkRequireCode }"
                       @blur="checkRequiredInput(Employee.EmployeeCode)"
                       type="text"
                       v-model="Employee.EmployeeCode"
@@ -60,6 +63,8 @@
                       id="txtFullName"
                       fieldName="FullName"
                       class="input-required"
+                      :class="{ 'border-red': this.checkRequireName }"
+                      @blur="checkRequiredInputName(Employee.FullName)"
                       type="text"
                       required
                       v-model="Employee.FullName"
@@ -96,9 +101,15 @@
                   <select
                     id="cbxPosition"
                     class="m-control"
+                    :class="{ 'border-red': this.checkRequireDep }"
+                    @blur="checkRequiredSelect(Employee.DepartmentId)"
                     v-model="Employee.DepartmentId"
                   >
-                    <option disabled value="">Chọn vị trí</option>
+                    <option
+                      disabled
+                      value="00000000-0000-0000-0000-000000000000"
+                      >Chọn vị trí</option
+                    >
                     <option
                       v-for="(item, index) in listEmployeeDepartment"
                       :key="index"
@@ -143,7 +154,6 @@
                   <div class="m-label">Chức danh</div>
                   <div class="m-control">
                     <input
-                      id="txtIdentityPlace"
                       fieldName="PhoneNumber"
                       class="input-required"
                       type="text"
@@ -155,7 +165,6 @@
                   <div class="m-label">Nơi cấp</div>
                   <div class="m-control">
                     <input
-                      id="txtIdentityPlace"
                       fieldName="PhoneNumber"
                       class="input-required"
                       type="text"
@@ -184,7 +193,6 @@
                     <div class="m-label">Địa chỉ</div>
                     <div class="m-control">
                       <input
-                        id="txtIdentityPlace"
                         fieldName="PhoneNumber"
                         class="input-required"
                         type="text"
@@ -197,12 +205,7 @@
                   <div class="m-flex-0">
                     <div class="m-label">DT di động</div>
                     <div class="m-control">
-                      <input
-                        id="txtAddress"
-                        fieldName="Address"
-                        type="text"
-                        v-model="Employee.PhoneNumber"
-                      />
+                      <input type="text" v-model="Employee.PhoneNumber" />
                     </div>
                   </div>
                   <div class="m-flex-0 mg-left-10px">
@@ -222,7 +225,6 @@
                     <div class="m-label">Email</div>
                     <div class="m-control">
                       <input
-                        id="txtAddress"
                         fieldName="Address"
                         type="text"
                         v-model="Employee.Email"
@@ -240,7 +242,7 @@
                           Số tài khoản (<span class="label-required">*</span>)
                         </th>
                         <th>
-                          Tên ngân hàng (<span class="label-required">*</span>)
+                          Tên ngân hàng
                         </th>
                         <th>Chi nhánh</th>
                         <th>Tỉnh/Tp ngân hàng</th>
@@ -249,14 +251,19 @@
                     </thead>
                     <tbody>
                       <tr v-for="(item, index) in listBank" :key="index">
-                        <td><input type="text" v-model="item.BankCode" /></td>
+                        <td>
+                          <input type="text" v-model="item.BankCode" />
+                        </td>
                         <td><input type="text" v-model="item.BankName" /></td>
                         <td><input type="text" v-model="item.BankBranch" /></td>
                         <td>
                           <input type="text" v-model="item.BankLocation" />
                         </td>
                         <td>
-                          <button class="btn-delete"></button>
+                          <button
+                            class="btn-delete"
+                            @click="deleteARowBank(index)"
+                          ></button>
                         </td>
                       </tr>
                     </tbody>
@@ -306,22 +313,40 @@
             </button>
           </div>
         </div>
+        <PopUp
+          :checkPopUp="!popUpShow"
+          :msgPopup="msgPopup"
+          @closePopUpAlert="closeAlert"
+          @OutPopUpAlert="outAlert"
+        ></PopUp>
       </div>
     </div>
   </div>
 </template>
 <script>
 import * as axios from "axios";
+import PopUp from "../base/PopUp";
 export default {
   props: {
     isHide: Boolean,
     Employee: Object,
-    checkShowIsTrue: Boolean
+    checkShowIsTrue: Boolean,
+    listBank: Array,
+    checkRequireCode: Boolean,
+    checkRequireName: Boolean,
+    checkRequireDep: Boolean
+  },
+  components: {
+    PopUp
   },
   data() {
     return {
       listEmployeeDepartment: [],
-      listBank: [],
+      // listBank: [],
+      // checkRequireCode: true,
+      // checkRequireName: true,
+      // checkRequireDep: true,
+      // checkBankCode: [],
       listEmployeePosition: [],
       bankTemp: {
         BankId: "00000000-0000-0000-0000-000000000000",
@@ -331,6 +356,9 @@ export default {
         BankLocation: "",
         EmployeeId: "00000000-0000-0000-0000-000000000000"
       },
+      EmployeeAfterAdd: {},
+      popUpShow: false,
+      msgPopup: "",
       dialog: false,
       display: "none"
       // checkShowIsTrue: true
@@ -341,14 +369,23 @@ export default {
       this.$emit("checkShowIsTrueContact", true);
       // this.checkShowIsTrue = true;
     },
+    closeAlert() {
+      this.popUpShow = false;
+    },
+    outAlert(){
+      location.reload();
+    },
+    focusInput() {
+      this.$refs.txtEmployeeCode.focus();
+    },
     ShowFalse() {
       // this.checkShowIsTrue = false;
       this.$emit("checkShowIsTrueBank", false);
-      if (this.Employee.EmployeeId == "00000000-0000-0000-0000-000000000000") {
-        this.listBank = [];
-      } else {
-        this.getBankById();
-      }
+      // if (this.Employee.EmployeeId == "00000000-0000-0000-0000-000000000000") {
+      //   this.listBank = [];
+      // } else {
+      //   this.getBankById();
+      // }
     },
     dragElement(e) {
       var pos1 = 0,
@@ -403,26 +440,72 @@ export default {
       this.listBank.push({ ...this.bankTemp });
     },
     deleteABank() {
-      this.bankTemp.EmployeeId = this.Employee.EmployeeId;
-      this.listBank.push(this.bankTemp);
+      this.listBank = [];
+    },
+    deleteARowBank(index) {
+      this.listBank.splice(index, 1);
     },
     async saveEmployee() {
       if (this.Employee.EmployeeId == "00000000-0000-0000-0000-000000000000") {
-        console.log(this.Employee);
         const response = await axios.post(
           "https://localhost:44373/api/v1/Employees",
           this.Employee
         );
-        console.log(response);
+        await this.getEmployeeByCode(this.listBank);
+        this.msgPopup = await response.data.Message;
+        this.popUpShow = !this.popUpShow;
+        // alert(response.data.Message);
       } else {
         const response = await axios.put(
           "https://localhost:44373/api/v1/Employees",
           this.Employee
         );
-        console.log(response);
+        await axios.delete(
+          "https://localhost:44373/api/v1/Banks/id?id=" +
+            this.Employee.EmployeeId
+        );
+        await this.addListBank();
       }
 
-      location.reload();
+      // await location.reload();
+    },
+    async bankGetIdAfterAdd(Id) {
+      if (this.listBank.length != 0) {
+        for (let i = 0; i < this.listBank.length; i++) {
+          await console.log(this.EmployeeAfterAdd.EmployeeId);
+          this.listBank[i].EmployeeId = await Id;
+          await console.log(this.listBank[i].EmployeeId);
+        }
+      }
+    },
+    async addListBank() {
+      if (this.listBank.length != 0) {
+        for (let i = 0; i < this.listBank.length; i++) {
+          await axios.post(
+            "https://localhost:44373/api/v1/Banks",
+            this.listBank[i]
+          );
+        }
+      }
+    },
+    async getEmployeeByCode(data) {
+      const response = await axios
+        .get(
+          "https://localhost:44373/api/v1/Employees/search?EmployeeCode=" +
+            this.Employee.EmployeeCode +
+            "&FullName=" +
+            this.Employee.EmployeeCode +
+            "&PhoneNumber=" +
+            this.Employee.EmployeeCode
+        )
+        .then(async function(response) {
+          if (data.length != 0) {
+            for (let i = 0; i < data.length; i++) {
+              data[i].EmployeeId = response.data.Data[0].EmployeeId;
+              await axios.post("https://localhost:44373/api/v1/Banks", data[i]);
+            }
+          }
+        });
     },
     saveAndAddEmployee() {
       this.saveEmployee();
@@ -440,10 +523,29 @@ export default {
 
     checkRequiredInput(text) {
       if (text == "" || text == null) {
-        return true;
-      }
-      // console.log(false);
+        this.$emit("changeRequireCode", true);
+      } else this.$emit("changeRequireCode", false);
     },
+    checkRequiredInputName(text) {
+      if (text == "" || text == null) {
+        this.$emit("changeRequireName", true);
+      } else this.$emit("changeRequireName", false);
+    },
+    checkRequiredSelect(text) {
+      if (
+        text == "" ||
+        text == null ||
+        text == "00000000-0000-0000-0000-000000000000"
+      ) {
+        this.$emit("changeRequireDep", true);
+      } else this.$emit("changeRequireDep", false);
+    },
+    // checkBankCodeIsTrue(text, index) {
+    //   console.log(text);
+    //   if (text == "" || text == null) {
+    //     this.checkBankCode[index] = true;
+    //   } else this.checkBankCode[index] = false;
+    // },
     async getListEmployeeDepartment() {
       await axios
         .get("https://localhost:44373/api/v1/Departments")
@@ -464,6 +566,22 @@ export default {
         )
         .then(response => (this.listBank = response.data.Data));
     }
+  },
+  // watch: {
+  //   isHide() {
+  //     // document.getElementById("txtEmployeeCode").focus();
+  //     this.$refs.txtEmployeeCode.focus();
+  //     console.log("afas");
+  //   }
+  // },
+  mounted() {
+    this.$watch(
+      "isHide",
+      function() {
+        this.focusInput();
+      },
+      { immediate: true }
+    );
   },
   created() {
     this.getListEmployeeDepartment();
@@ -527,7 +645,7 @@ export default {
 }
 
 .dialog-content {
-  height: 550px;
+  height: 600px;
   position: fixed;
   border-radius: 5px;
   width: 835px;
@@ -690,6 +808,9 @@ input[required]::after {
 }
 
 input.border-red {
+  border: 1px solid #ff4747;
+}
+select.border-red {
   border: 1px solid #ff4747;
 }
 
@@ -909,9 +1030,6 @@ input::placeholder {
 }
 input:focus {
   border: 1px solid #01b075 !important;
-}
-input.border-red {
-  border: 1px solid #ff4747;
 }
 .m-btn {
   display: flex;
