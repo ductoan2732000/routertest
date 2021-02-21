@@ -19,7 +19,9 @@
           </div>
           <div class="dialog-header-help"></div>
           <div class="dialog-header-close">
-            <button v-on:click="btnCancelOnClick">x</button>
+            <button v-on:click="btnCancelOnClick" class="btn-x m-btn-default">
+              <i class="far fa-save"></i><span class="btn-text">x</span>
+            </button>
           </div>
         </div>
         <div class="dialog-body">
@@ -311,7 +313,12 @@
             </button>
           </div>
         </div>
-        <PopUp :checkPopUp="!popUpShow" :msgPopup="msgPopup"></PopUp>
+        <PopUp
+          :checkPopUp="!popUpShow"
+          :msgPopup="msgPopup"
+          @closePopUpAlert="closeAlert"
+          @OutPopUpAlert="outAlert"
+        ></PopUp>
       </div>
     </div>
   </div>
@@ -361,6 +368,12 @@ export default {
     ShowTrue() {
       this.$emit("checkShowIsTrueContact", true);
       // this.checkShowIsTrue = true;
+    },
+    closeAlert() {
+      this.popUpShow = false;
+    },
+    outAlert(){
+      location.reload();
     },
     focusInput() {
       this.$refs.txtEmployeeCode.focus();
@@ -439,9 +452,9 @@ export default {
           this.Employee
         );
         await this.getEmployeeByCode(this.listBank);
-        // this.msgPopup = await response.data.Message;
-        // this.popUpShow = !this.popUpShow;
-        alert(response.data.Message);
+        this.msgPopup = await response.data.Message;
+        this.popUpShow = !this.popUpShow;
+        // alert(response.data.Message);
       } else {
         const response = await axios.put(
           "https://localhost:44373/api/v1/Employees",
@@ -454,7 +467,7 @@ export default {
         await this.addListBank();
       }
 
-      await location.reload();
+      // await location.reload();
     },
     async bankGetIdAfterAdd(Id) {
       if (this.listBank.length != 0) {

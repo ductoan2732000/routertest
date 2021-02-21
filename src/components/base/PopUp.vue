@@ -1,11 +1,14 @@
 <template>
-  <div class="pop-up" :class="{ 'show-pop-up': checkPopUp }">
-    <div class="alert-pop-up">
-      {{ this.msgPopup }}
-    </div>
-    <div class="option-pop-up">
-      <button class="btn-option-popup">Không</button>
-      <button class="btn-option-popup">Có</button>
+  <div :class="{ 'show-pop-up': checkPopUp }">
+    <div class="pop-up-modal"></div>
+    <div class="pop-up">
+      <div class="alert-pop-up">
+        {{ this.msgPopup }}
+      </div>
+      <div class="option-pop-up">
+        <button class="btn-option-popup" @click="returnDialog">Cancle</button>
+        <button class="btn-option-popup" @click="outDialog">Ok</button>
+      </div>
     </div>
   </div>
 </template>
@@ -15,6 +18,20 @@ export default {
   props: {
     checkPopUp: Boolean,
     msgPopup: String
+  },
+  methods: {
+    returnDialog() {
+      if (this.checkStatus() == "Insert") {
+        console.log("dugn r");
+        this.$emit("closePopUpAlert", false);
+      }
+    },
+    outDialog() {
+      this.$emit("OutPopUpAlert", false);
+    },
+    checkStatus() {
+      if (this.msgPopup.includes("(Lỗi thêm).") == true) return "Insert";
+    }
   }
 };
 </script>
@@ -79,5 +96,14 @@ export default {
 }
 .btn-option-popup:hover {
   background-color: #2fbe8e;
-}</style
->>
+}
+.pop-up-modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: black;
+  opacity: 0.4;
+}
+</style>
