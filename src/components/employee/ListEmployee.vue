@@ -14,6 +14,9 @@
           type="text"
           class="icon-search input-search"
           placeholder="Tìm kiếm theo Mã, Tên Khác"
+          required
+          v-model="searchByOther"
+          v-on:keyup.enter="searchByCodeAndName(searchByOther)"
         />
         <!-- <DropDown
           :Datas="SelectDepartments"
@@ -125,6 +128,15 @@
       @changeRequireName="changeRequireName($event)"
       @changeRequireCode="changeRequireCode($event)"
     ></Dialog>
+    <PopUp
+      :checkPopUp="!deleteEmployeeShow"
+      :msgPopup="msgEmployeePopup"
+      :indexDelete="indexDeleteBank"
+      @closePopUpAlert="closeAlertPopUp"
+      @OutPopUpAlert="outAlertPopUp"
+      @notDeletBank="notDeletBankFromEmployee($event)"
+      @deleteBankYes="deleteBankYesFromEmployee($event)"
+    ></PopUp>
   </div>
 </template>
 
@@ -134,10 +146,15 @@ import Dialog from "./DialogEmployee.vue";
 import DropDown from "../base/DropDown";
 import DropUp from "../base/DropUp";
 import Function from "../base/Function";
+import PopUp from "../base/PopUp";
 export default {
   name: "Employee",
   data() {
     return {
+      deleteEmployeeShow: false,
+      msgEmployeePopup: "",
+      indexDeleteBank: "",
+      searchByOther: "",
       EmployeeOrigin: {
         EmployeeId: "00000000-0000-0000-0000-000000000000",
         EmployeeCode: "",
@@ -241,6 +258,25 @@ export default {
     };
   },
   methods: {
+    closeAlertPopUp() {
+      this.deleteEmployeeShow = false;
+    },
+    outAlertPopUp() {
+      location.reload();
+    },
+    notDeletBankFromEmployee() {
+      this.deleteEmployeeShow = false;
+      this.indexDeleteBank = "";
+    },
+    async deleteBankYesFromEmployee(e) {
+      this.deleteEmployeeShow = false;
+      this.indexDeleteBank = "";
+      const response = await axios.delete(
+        "https://localhost:44373/api/v1/Employees?id=" + e
+      );
+      console.log(response.data);
+      location.reload();
+    },
     formartGender(Gender) {
       if (Gender == 0) return "Nam";
       else if (Gender == 1) return "Nữ";
@@ -321,10 +357,16 @@ export default {
     },
     async chooseFunctionData(e, dataId) {
       if (e == this.Functions.items[1]) {
-        const response = await axios.delete(
-          "https://localhost:44373/api/v1/Employees?id=" + dataId
-        );
-        location.reload();
+        this.deleteEmployeeShow = await true;
+        this.indexDeleteBank = dataId;
+        this.msgEmployeePopup =
+          "Bạn có chắc chắn muốn xóa nhân viên này không ?";
+
+        // const response = await axios.delete(
+        //   "https://localhost:44373/api/v1/Employees?id=" + dataId
+        // );
+        // console.log(response.data);
+        // location.reload();
       }
     },
     async getBankById(id) {
@@ -390,13 +432,40 @@ export default {
       }
 
       console.log(this.page);
+    },
+    async searchByCodeAndName(data) {
+      if (data != "") {
+        const response = await axios.get(
+          "https://localhost:44373/api/v1/Employees/search?EmployeeCode=" +
+            data +
+            "&FullName=" +
+            data +
+            "&PhoneNumber=" +
+            data
+        );
+        this.employees = response.data.Data;
+      } else if (data == "" || data == null) {
+        const numberTotal = await axios.get(
+          "https://localhost:44373/api/v1/Employees/number"
+        );
+        const response = await axios.get(
+          "https://localhost:44373/api/v1/Employees/Pagging?limit=" +
+            this.limit +
+            "&ofset=" +
+            this.ofset
+        );
+
+        this.number = numberTotal.data.Data.Total;
+        this.employees = response.data.Data;
+      }
     }
   },
   components: {
     Dialog,
     DropDown,
     DropUp,
-    Function
+    Function,
+    PopUp
   },
   async created() {
     const numberTotal = await axios.get(
@@ -411,7 +480,6 @@ export default {
 
     this.number = numberTotal.data.Data.Total;
     this.employees = response.data.Data;
-    console.log(this.employees);
   }
 };
 </script>
