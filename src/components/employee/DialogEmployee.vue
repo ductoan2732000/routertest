@@ -1129,7 +1129,8 @@ input:focus {
   z-index: 10;
 }
 .backgoundblue {
-  background-color: #019160;
+  background-color: #8ab8e4;
+  height: 40px;
 }
 .backgroundgray {
   background-color: #d2cfcf;
