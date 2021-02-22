@@ -10,11 +10,11 @@
         <div class="dialog-header" id="move-dialog" @mousedown="dragElement">
           <div class="dialog-header-title">THÔNG TIN NHÂN VIÊN</div>
           <div class="option-employee">
-            <input type="checkbox" id="check1" name="" value="" />
+            <input type="checkbox" id="check1" name="option-c" value="" />
             <label for="check1" class="checkbox-check">Là khách hàng</label>
           </div>
           <div class="option-employee">
-            <input type="checkbox" id="check2" name="" value="" />
+            <input type="checkbox" id="check2" name="option-c" value="" />
             <label for="check2" class="checkbox-check">Là nhà cung cấp</label>
           </div>
           <div class="dialog-header-help"></div>
@@ -316,8 +316,11 @@
         <PopUp
           :checkPopUp="!popUpShow"
           :msgPopup="msgPopup"
+          :indexDelete="indexDelete"
           @closePopUpAlert="closeAlert"
           @OutPopUpAlert="outAlert"
+          @notDeletBank="notDeletBank($event)"
+          @deleteBankYes="deleteBankYes($event)"
         ></PopUp>
       </div>
     </div>
@@ -358,6 +361,8 @@ export default {
       },
       EmployeeAfterAdd: {},
       popUpShow: false,
+      indexDelete: "",
+      optionDeleteBank: "",
       msgPopup: "",
       dialog: false,
       display: "none"
@@ -372,8 +377,19 @@ export default {
     closeAlert() {
       this.popUpShow = false;
     },
-    outAlert(){
+    outAlert() {
       location.reload();
+    },
+    notDeletBank(e) {
+      this.popUpShow = false;
+      this.optionDeleteBank = e;
+      this.indexDelete = "";
+    },
+    deleteBankYes(e) {
+      this.popUpShow = false;
+      this.listBank.splice(Number(e), 1);
+      console.log(e);
+      this.indexDelete = "";
     },
     focusInput() {
       this.$refs.txtEmployeeCode.focus();
@@ -443,7 +459,13 @@ export default {
       this.listBank = [];
     },
     deleteARowBank(index) {
-      this.listBank.splice(index, 1);
+      this.popUpShow = !this.popUpShow;
+      this.msgPopup = "Bạn có chắc chắn muốn xóa tài khoản ngân hàng này ?";
+      this.indexDelete = index.toString();
+      // if (this.optionDeleteBank == "No") {
+      // } else {
+      //   this.listBank.splice(index, 1);
+      // }
     },
     async saveEmployee() {
       if (this.Employee.EmployeeId == "00000000-0000-0000-0000-000000000000") {
@@ -451,7 +473,10 @@ export default {
           "https://localhost:44373/api/v1/Employees",
           this.Employee
         );
-        await this.getEmployeeByCode(this.listBank);
+        console.log(response.data.Message);
+        if (response.data.Message.includes("(Thêm thành công).")) {
+          await this.getEmployeeByCode(this.listBank);
+        }
         this.msgPopup = await response.data.Message;
         this.popUpShow = !this.popUpShow;
         // alert(response.data.Message);
@@ -460,11 +485,17 @@ export default {
           "https://localhost:44373/api/v1/Employees",
           this.Employee
         );
-        await axios.delete(
-          "https://localhost:44373/api/v1/Banks/id?id=" +
-            this.Employee.EmployeeId
-        );
-        await this.addListBank();
+
+        console.log(response.data.Message);
+        if (response.data.Message.includes("(Sửa thành công).")) {
+          await axios.delete(
+            "https://localhost:44373/api/v1/Banks/id?id=" +
+              this.Employee.EmployeeId
+          );
+          await this.addListBank();
+        }
+        this.msgPopup = await response.data.Message;
+        this.popUpShow = !this.popUpShow;
       }
 
       // await location.reload();
