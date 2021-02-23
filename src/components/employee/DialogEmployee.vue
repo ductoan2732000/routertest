@@ -540,8 +540,9 @@ export default {
           }
         });
     },
-    saveAndAddEmployee() {
-      this.saveEmployee();
+    async saveAndAddEmployee() {
+      await this.saveEmployee();
+      await this.$emit("clickBtnAdd");
     },
     async deleteBank(bankId) {
       const response = await axios.delete(

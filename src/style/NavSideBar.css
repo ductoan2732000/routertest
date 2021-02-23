@@ -4,7 +4,7 @@
   left: 0;
   width: 220px;
   height: 100vh;
-  background-color: gray;
+  background-color: #393a3d;
   border-right: 1px solid #bbbbbb;
   color: white;
 }
@@ -64,13 +64,13 @@
   background-image: url("../assets/icon/dic-employee.png");
   background-position: center;
   background-repeat: no-repeat;
-  background-size:contain;
+  background-size: contain;
 }
 .customer-icon {
   background-image: url("../assets/icon/dic-employee.png");
   background-position: center;
   background-repeat: no-repeat;
-  background-size:contain;
+  background-size: contain;
 }
 .menu-text {
   text-decoration-line: none;

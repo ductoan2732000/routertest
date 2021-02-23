@@ -123,6 +123,7 @@
       @changeRequireDep="changeRequireDep($event)"
       @changeRequireName="changeRequireName($event)"
       @changeRequireCode="changeRequireCode($event)"
+      @clickBtnAdd="clickBtnAdd()"
     ></Dialog>
     <PopUp
       :checkPopUp="!deleteEmployeeShow"
@@ -328,6 +329,9 @@ export default {
       this.checkRequireName = true;
       this.checkRequireDep = true;
       this.listBankTemp = [];
+    },
+    async clickBtnAdd() {
+      await this.btnAdd();
     },
     datetimeToDate(str) {
       return str.slice(0, 10);
@@ -565,4 +569,3 @@ export default {
   }
 };
 </script>
-
