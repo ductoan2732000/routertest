@@ -81,31 +81,26 @@
       <div class="pagging-info">
         Tổng số
         <b>{{
-          this.ofset +
-            1 +
-            "-" +
-            (parseInt(this.limit) + this.ofset) +
-            " / " +
-            this.number
+          this.ofset + 1 + "-" + this.checkLimited() + " / " + this.number
         }}</b>
       </div>
       <div class="pagging-option">
-        <button class="first-page">Trước</button>
+        <button class="first-page" @click="firstPage">Trước</button>
         <div class="list-page">
           <button class="btn-page select-page">{{ page[0] }}</button>
           <button
             class="btn-page"
             @click="selectPage(page[1])"
-            v-html="page[1]"
+            v-html="this.checkShowPageNull(page[1])"
           ></button>
           <button class="btn-page" @click="selectPage(page[2])">
-            {{ page[2] }}
+            {{ this.checkShowPageNull(page[2]) }}
           </button>
           <button class="btn-page" @click="selectPage(page[3])">
-            {{ page[3] }}
+            {{ this.checkShowPageNull(page[3]) }}
           </button>
         </div>
-        <button class="last-page">Sau</button>
+        <button class="last-page" @click="chooseLastPage">Sau</button>
       </div>
       <DropUp
         :Datas="SelectPositions"
@@ -195,6 +190,10 @@ export default {
       checkRequireName: true,
       checkRequireDep: true,
       page: [1, 2, 3, 4],
+      page1: 1,
+      page2: 2,
+      page3: 3,
+      page4: 4,
       number: 0,
       limit: 10,
       ofset: 0,
@@ -277,7 +276,7 @@ export default {
         "https://localhost:44373/api/v1/Employees?id=" + e
       );
       console.log(response.data);
-      location.reload();
+      this.reloadEmployee();
     },
     formartGender(Gender) {
       if (Gender == 0) return "Nam";
@@ -296,6 +295,29 @@ export default {
       else if (Status == 1) return "Ngưng sử dụng";
       else if (Status == 2) return "Khác";
       else return "";
+    },
+    firstPage() {
+      this.ofset = 0;
+      this.selectPage(1);
+    },
+    lastPage() {
+      let a = this.number % this.limit;
+      this.ofset = this.number - a;
+      this.reloadEmployee();
+    },
+    chooseLastPage() {
+      let maxPage;
+      if (this.number % this.limit == 0) {
+        maxPage = this.number / this.limit;
+      } else {
+        maxPage = Math.ceil(this.number / this.limit);
+      }
+      this.selectPage(maxPage);
+    },
+    checkLimited() {
+      if (this.limit + this.ofset > this.number) {
+        return this.number;
+      } else return this.limit + this.ofset;
     },
     btnAdd() {
       this.isHideParent = false;
@@ -423,7 +445,7 @@ export default {
       }
     },
     updateNumber(e) {
-      this.limit = e.slice(0, 2);
+      this.limit = parseInt(e.slice(0, 2));
       this.updateView();
     },
     async updateView() {
@@ -435,24 +457,49 @@ export default {
       );
       this.employees = response.data.Data;
     },
+    checkShowPageNull(page) {
+      if (page == null) return "*";
+      else return page;
+    },
     selectPage(pageIsChoose) {
-      let maxPage = 0;
-      if (this.number % this.limit == 0) {
-        maxPage = this.number / this.limit;
-      } else maxPage = Math.floor(this.number / this.limit) + 1;
-
-      if (pageIsChoose <= maxPage) {
-        let j = 0;
-        for (let i = pageIsChoose; i <= maxPage; i++) {
-          this.page[j] = i;
-          j++;
+      let maxPage;
+      if (pageIsChoose != null) {
+        if (this.number % this.limit == 0) {
+          maxPage = this.number / this.limit;
+        } else {
+          maxPage = Math.ceil(this.number / this.limit);
         }
-        if (j <= 3) {
-          for (let i = j; i <= 3; i++) this.page[i] = 0;
+        let arrTemp = [0, 0, 0, 0];
+        if (pageIsChoose <= maxPage) {
+          let i = pageIsChoose;
+          let j = 0;
+          for (j; j <= 3; j++) {
+            if (i <= maxPage) {
+              arrTemp[j] = i;
+              i++;
+            } else {
+              arrTemp[j] = null;
+            }
+          }
+          // console.log(arrTemp);
+          // console.log(i);
+          // console.log(j);
         }
+        this.page = arrTemp;
+        this.loadEmployeeWhenSelectPage(pageIsChoose, maxPage);
       }
-
-      console.log(this.page);
+    },
+    loadEmployeeWhenSelectPage(page, maxPage) {
+      if (page == maxPage) {
+        this.lastPage();
+        console.log(this.ofset);
+        console.log(this.limit);
+      } else {
+        this.ofset = this.limit * page - this.limit;
+        console.log(this.ofset);
+        console.log(this.limit);
+        this.reloadEmployee();
+      }
     },
     async searchByCodeAndName(data) {
       if (data != "") {
