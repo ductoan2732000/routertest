@@ -30,7 +30,7 @@
   padding-left: 10px;
 }
 #data-table thead tr {
-  background-color: hsl(0, 5%, 66%);
+  background-color: #bbbbbb;
 }
 /* #data-table thead th:first-child {
   min-width: 50px;
