@@ -1,10 +1,13 @@
-@import url("./header-content.css");
-@import url("./filter-content.css");
-@import url("./data-content.css");
 @import url("./pagging-content.css");
 @import url("../../style/base/DropUp.css");
 @import url("../../style/base/Function.css");
+@import url("../../style/base/PopUp.css");
+@import url("../../style/base/DropDown.css");
 @import url("../../style/employee/DialogEmployee.css");
+@import url("../../style/employee/ListEmployee.css");
+@import url("../../style/Content.css");
+@import url("../../style/Header.css");
+@import url("../../style/NavSideBar.css");
 @font-face {
   font-family: "GoogleSans-Regular";
   src: url("../font/GoogleSans-Regular.otf") format("opentype");

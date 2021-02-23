@@ -1,0 +1,89 @@
+.header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  width: calc(100% - 221px);
+  height: 60px;
+  border-bottom: 1px solid #bbbbbb;
+}
+.name-store {
+  padding: 16px;
+  font-size: 16px;
+}
+.select-store {
+  height: 40px;
+  width: 200px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+}
+.account-info {
+  position: absolute;
+  right: 24px;
+  display: flex;
+  align-items: center;
+}
+.account-iconbar {
+  margin-left: 20px;
+  width: 30px;
+  height: 30px;
+  /* border: 1px solid #ccc; */
+  /* border-radius: 50%; */
+  background-image: url(/static/img/Sprites.64af8f61.64af8f6.svg);
+  background-size: 2000px;
+  background-position: -561px -26px;
+}
+.account-setting {
+  width: 30px;
+  height: 30px;
+  /* border: 1px solid #ccc; */
+  /* border-radius: 50%; */
+  background-image: url(/static/img/Sprites.64af8f61.64af8f6.svg);
+  background-size: 2000px;
+  background-position: -667px -26px;
+}
+.account-chat {
+  width: 30px;
+  height: 30px;
+  background-image: url(/static/img/Sprites.64af8f61.64af8f6.svg);
+  background-size: 2000px;
+  background-position: -890px -26px;
+}
+.account-help {
+  width: 30px;
+  height: 30px;
+  background-image: url(/static/img/Sprites.64af8f61.64af8f6.svg);
+  background-size: 2000px;
+  background-position: -724px -26px;
+}
+.account-alert {
+  width: 30px;
+  height: 30px;
+  background-image: url(/static/img/Sprites.64af8f61.64af8f6.svg);
+  background-size: 2000px;
+  background-position: -780px -26px;
+}
+.account-image {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  background-image: url("../assets/icon/avatar-default.png");
+  background-size: contain;
+}
+.account-name {
+  padding: 10px;
+}
+.account-option {
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+  background-image: url("../assets/icon/option.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 0 center;
+}
