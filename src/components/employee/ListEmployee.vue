@@ -196,7 +196,7 @@ export default {
       checkRequireDep: true,
       page: [1, 2, 3, 4],
       number: 0,
-      limit: 150,
+      limit: 10,
       ofset: 0,
       isHideParent: true,
       checkBankIsTrue: true,
