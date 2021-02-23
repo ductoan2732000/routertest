@@ -123,7 +123,7 @@
       @changeRequireDep="changeRequireDep($event)"
       @changeRequireName="changeRequireName($event)"
       @changeRequireCode="changeRequireCode($event)"
-      @clickBtnAdd="clickBtnAdd()"
+      @clickBtnAdd="clickBtnAdd"
     ></Dialog>
     <PopUp
       :checkPopUp="!deleteEmployeeShow"
