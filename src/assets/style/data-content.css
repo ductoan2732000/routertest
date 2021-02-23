@@ -29,6 +29,9 @@
   border-right: 1px solid #ccc;
   padding-left: 10px;
 }
+#data-table thead tr {
+  background-color: hsl(0, 5%, 66%);
+}
 /* #data-table thead th:first-child {
   min-width: 50px;
 } */

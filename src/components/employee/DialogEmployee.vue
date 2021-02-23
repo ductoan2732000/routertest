@@ -378,7 +378,9 @@ export default {
       this.popUpShow = false;
     },
     outAlert() {
-      location.reload();
+      // location.reload();
+      this.popUpShow = false;
+      this.$emit("closePopupAndReload");
     },
     notDeletBank(e) {
       this.popUpShow = false;
