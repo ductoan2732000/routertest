@@ -122,6 +122,7 @@
       :checkRequireName="checkRequireName"
       :checkRequireDep="checkRequireDep"
       @closePopup="closePopup"
+      @closePopupAndReload="closePopupAndReload"
       @checkShowIsTrueContact="checkShowIsTrueContact($event)"
       @checkShowIsTrueBank="checkShowIsTrueBank($event)"
       @changeRequireDep="changeRequireDep($event)"
@@ -171,7 +172,7 @@ export default {
         PersonalTaxCode: "",
         BasicSalary: "",
         JoiningDate: "",
-        Status: null,
+        Status: 0,
         CreatedDate: "",
         CreatedBy: "",
         ModifiedDate: "",
@@ -188,6 +189,7 @@ export default {
         Address: ""
       },
       EmployeeBackUp: {},
+      EmployeeUpdateStatus: {},
       employees: [],
       checkRequireCode: true,
       checkRequireName: true,
@@ -290,9 +292,9 @@ export default {
       return year + "/" + month + "/" + day;
     },
     formartStatus(Status) {
-      if (Status == 0) return "Đang làm việc";
-      else if (Status == 1) return "Đang công tác";
-      else if (Status == 2) return "Đã nghỉ việc";
+      if (Status == 0) return "Đang sử dụng";
+      else if (Status == 1) return "Ngưng sử dụng";
+      else if (Status == 2) return "Khác";
       else return "";
     },
     btnAdd() {
@@ -355,6 +357,9 @@ export default {
       //   )
       //   .then(response => (this.listBank = response.data.Data));
     },
+    stopUse(data) {
+      console.log(data);
+    },
     async chooseFunctionData(e, dataId) {
       if (e == this.Functions.items[1]) {
         this.deleteEmployeeShow = await true;
@@ -367,6 +372,18 @@ export default {
         // );
         // console.log(response.data);
         // location.reload();
+      } else if (e == this.Functions.items[2]) {
+        const response = await axios.get(
+          "https://localhost:44373/api/v1/Employees/id?id=" + dataId
+        );
+        this.EmployeeUpdateStatus = response.data.Data;
+        this.EmployeeUpdateStatus.Status = 1;
+        console.log(this.EmployeeUpdateStatus);
+        await axios.put(
+          "https://localhost:44373/api/v1/Employees",
+          this.EmployeeUpdateStatus
+        );
+        this.reloadEmployee();
       }
     },
     async getBankById(id) {
@@ -376,6 +393,10 @@ export default {
     },
     closePopup() {
       this.isHideParent = true;
+    },
+    closePopupAndReload() {
+      this.isHideParent = true;
+      this.reloadEmployee();
     },
     checkShowIsTrueContact(e) {
       this.checkBankIsTrue = true;
@@ -458,6 +479,20 @@ export default {
         this.number = numberTotal.data.Data.Total;
         this.employees = response.data.Data;
       }
+    },
+    async reloadEmployee() {
+      const numberTotal = await axios.get(
+        "https://localhost:44373/api/v1/Employees/number"
+      );
+      const response = await axios.get(
+        "https://localhost:44373/api/v1/Employees/Pagging?limit=" +
+          this.limit +
+          "&ofset=" +
+          this.ofset
+      );
+
+      this.number = numberTotal.data.Data.Total;
+      this.employees = response.data.Data;
     }
   },
   components: {
